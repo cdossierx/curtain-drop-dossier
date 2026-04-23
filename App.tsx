@@ -14,7 +14,10 @@ import NotFound from "./pages/NotFound"
 
 export default function App() {
   return (
-    <Routes>
+    <div style={{ padding: "20px", fontSize: "24px" }}>
+
+      <div>Curtain Drop Dossier is LIVE</div>
+      <Routes>
       <Route path="/" element={<Dashboard />} />
       <Route path="/log" element={<LogIncident />} />
       <Route path="/timeline" element={<Timeline />} />
