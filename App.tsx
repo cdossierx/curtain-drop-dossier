@@ -20,7 +20,7 @@ export default function App() {
 
       <div>Curtain Drop Dossier is LIVE</div>
       <Routes>
-      <Route path="/" element={<div>HELLO TEST</div> />} />
+      <Route path="/" element={<div>HELLO TEST</div>}/>
       <Route path="/log" element={<LogIncident />} />
       <Route path="/timeline" element={<Timeline />} />
       <Route path="/intake" element={<Intake />} />
