@@ -12,6 +12,8 @@ import Settings from './pages/Settings'
 import NotFound from "./pages/NotFound"
 
 export default function App() {
+  console.log("App rendered!");
+  
   return (
     <BrowserRouter>
     <div style={{ padding: "20px", fontSize: "24px" }}>
