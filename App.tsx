@@ -14,6 +14,7 @@ import NotFound from "./pages/NotFound"
 
 export default function App() {
   return (
+    <BrowserRouter>
     <div style={{ padding: "20px", fontSize: "24px" }}>
 
       <div>Curtain Drop Dossier is LIVE</div>
@@ -31,5 +32,7 @@ export default function App() {
       <Route path="/settings" element={<Settings />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
+    </div>
+    </BrowserRouter>
   )
 }
