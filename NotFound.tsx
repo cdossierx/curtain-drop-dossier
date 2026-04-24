@@ -1,6 +1,6 @@
 import { Button } from "./button";
 import { Card, CardContent, CardHeader, CardTitle } from "./card";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 
 export default function NotFound() {
   return (
