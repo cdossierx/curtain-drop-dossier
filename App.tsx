@@ -1,3 +1,4 @@
+import logincident from '.pages/logincident'
 import { Routes, Route } from 'react-router-dom'
 import Dashboard from './pages/Dashboard'
 import Timeline from './pages/Timeline'
