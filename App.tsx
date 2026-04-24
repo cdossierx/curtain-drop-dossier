@@ -7,7 +7,6 @@ import Persons from './Persons'
 import Evidence from './Evidence'
 import TagsPage from './Tags'
 import Platforms from './Platforms'
-import Analytics from './Analytics'
 import Settings from './Settings'
 import NotFound from "./NotFound"
 
@@ -28,7 +27,6 @@ export default function App() {
       <Route path="/evidence" element={<Evidence />} />
       <Route path="/tags" element={<TagsPage />} />
       <Route path="/platforms" element={<Platforms />} />
-      <Route path="/analytics" element={<Analytics />} />
       <Route path="/settings" element={<Settings />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
