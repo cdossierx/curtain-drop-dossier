@@ -1,6 +1,5 @@
 import { Routes, Route } from 'react-router-dom'
 import Dashboard from './pages/Dashboard'
-import LogIncident from './pages/LogIncident'
 import Timeline from './pages/Timeline'
 import Intake from './pages/Intake'
 import Persons from './pages/Persons'
@@ -21,7 +20,6 @@ export default function App() {
       <div>Curtain Drop Dossier is LIVE</div>
       <Routes>
       <Route path="/" element={<div>HELLO TEST</div>}/>
-      <Route path="/log" element={<LogIncident />} />
       <Route path="/timeline" element={<Timeline />} />
       <Route path="/intake" element={<Intake />} />
       <Route path="/persons" element={<Persons />} />
