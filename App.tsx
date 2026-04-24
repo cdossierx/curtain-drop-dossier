@@ -1,15 +1,15 @@
-import LogIncident from './pages/LogIncident'
+import LogIncident from './LogIncident'
 import { Routes, Route } from 'react-router-dom'
-import Dashboard from './pages/Dashboard'
-import Timeline from './pages/Timeline'
-import Intake from './pages/Intake'
-import Persons from './pages/Persons'
-import Evidence from './pages/Evidence'
-import TagsPage from './pages/Tags'
-import Platforms from './pages/Platforms'
-import Analytics from './pages/Analytics'
-import Settings from './pages/Settings'
-import NotFound from "./pages/NotFound"
+import Dashboard from './Dashboard'
+import Timeline from './timeline'
+import Intake from './Intake'
+import Persons from './Persons'
+import Evidence from './Evidence'
+import TagsPage from './Tags'
+import Platforms from './Platforms'
+import Analytics from './Analytics'
+import Settings from './Settings'
+import NotFound from "./NotFound"
 
 export default function App() {
   console.log("App rendered!");
