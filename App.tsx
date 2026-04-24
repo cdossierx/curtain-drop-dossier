@@ -1,7 +1,7 @@
 import LogIncident from './LogIncident'
 import { Routes, Route } from 'react-router-dom'
 import Dashboard from './Dashboard'
-import Timeline from './Timeline'
+import Timeline from './timeline'
 import Intake from './Intake'
 import Persons from './Persons'
 import Evidence from './Evidence'
