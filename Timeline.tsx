@@ -8,7 +8,7 @@ import { Skeleton } from "./components/ui/skeleton";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./components/ui/dialog";
 import { useState, useEffect } from "react";
-import { useSearchParams } from "react-router";
+import { useSearchParams } from "react-router-dom";
 import { Clock, Trash2, ExternalLink, X, Filter, Pencil, Link2, Unlink, FileImage } from "lucide-react";
 import { toast } from "sonner";
 import { EditIncident } from "./components/EditIncident";
