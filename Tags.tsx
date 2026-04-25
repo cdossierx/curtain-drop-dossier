@@ -1,9 +1,9 @@
-import { trpc } from "../providers/trpc"
-import { AppLayout } from "../components/AppLayout";
-import { Button } from "../components/ui/button";
-import { Input } from "../components/ui/input";
-import { Label } from "../components/ui/label";
-import { Card, CardContent } from "../components/ui/card";
+import { trpc } from "./trpc"
+import { AppLayout } from "./components/AppLayout";
+import { Button } from "./components/ui/button";
+import { Input } from "./components/ui/input";
+import { Label } from "./components/ui/label";
+import { Card, CardContent } from "./components/ui/card";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
