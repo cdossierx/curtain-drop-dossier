@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from ".../components/ui/card
 import { Slider } from ".../components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
 import { useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { Save, RotateCcw } from "lucide-react";
 
