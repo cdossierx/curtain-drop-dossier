@@ -1,8 +1,8 @@
-import { trpc } from "@/providers/trpc";
+import { trpc } from "../providers/trpc";
 import { AppLayout } from "../components/AppLayout";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Progress } from "@/components/ui/progress";
+import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
+import { Skeleton } from "../components/ui/skeleton";
+import { Progress } from "../components/ui/progress";
 import {
   Activity,
 } from "lucide-react";
