@@ -10,7 +10,7 @@ import {
   PieChart, Pie, Cell, Bar, XAxis, YAxis,
   CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line,
 } from "recharts";
-import { FloatingActionButton } from "@/components/FloatingActionButton";
+import { FloatingActionButton } from "./components/FloatingActionButton";
 import { useNavigate } from "react-router";
 
 const COLORS = ["#ef4444", "#f97316", "#eab308", "#22c55e", "#3b82f6", "#a855f7", "#ec4899", "#6b7280", "#14b8a6", "#f43f5e", "#8b5cf6"];
