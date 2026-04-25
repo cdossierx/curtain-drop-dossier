@@ -1,11 +1,11 @@
-import { useAuth } from "@/hooks/useAuth";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { useAuth } from "../hooks/useAuth";
+import { Avatar, AvatarFallback } from "../components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "../components/ui/dropdown-menu";
 import {
   Sidebar,
   SidebarContent,
@@ -18,12 +18,12 @@ import {
   SidebarProvider,
   SidebarTrigger,
   useSidebar,
-} from "@/components/ui/sidebar";
-import { LOGIN_PATH } from "@/const";
-import { useIsMobile } from "@/hooks/use-mobile";
+} from "../components/ui/sidebar";
+import { LOGIN_PATH } from "../const";
+import { useIsMobile } from "../hooks/use-mobile";
 import { LayoutDashboard, LogOut, PanelLeft, Users } from "lucide-react";
 import { type CSSProperties, type ReactNode, useEffect, useRef, useState } from "react";
-import { useLocation, useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router-com";
 import { AuthLayoutSkeleton } from "./AuthLayoutSkeleton";
 import { Button } from "./ui/button";
 
