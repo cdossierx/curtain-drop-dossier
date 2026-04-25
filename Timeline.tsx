@@ -1,4 +1,4 @@
-import { trpc } from "./providers/trpc";
+import { trpc } from "../providers/trpc";
 import { AppLayout } from "./components/AppLayout";
 import { Card, CardContent } from "./components/ui/card";
 import { Input } from "./components/ui/input";
