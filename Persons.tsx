@@ -10,7 +10,7 @@ import { Skeleton } from "./components/ui/skeleton";
 import { Progress } from "./components/ui/progress";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./components/ui/dialog";
 import { useState, useEffect } from "react";
-import { useSearchParams } from "react-router";
+import { useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import { Plus, Trash2, UserCircle, Pencil, Loader2 } from "lucide-react";
 import { EditDialog } from "./components/EditDialog";
