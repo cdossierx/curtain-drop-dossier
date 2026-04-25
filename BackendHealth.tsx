@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { AlertTriangle, CheckCircle } from "lucide-react";
-import { trpc } from "@/providers/trpc";
+import { trpc } from "./providers/trpc";
 
 /**
  * BackendHealth — Detects whether the API server is reachable.
