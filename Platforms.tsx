@@ -1,16 +1,16 @@
 import { trpc } from "./trpc";
-import { AppLayout } from "./components/AppLayout";
-import { Button } from "./components/ui/button";
-import { Input } from "./components/ui/input";
-import { Label } from "./components/ui/label";
-import { Textarea } from "./components/ui/textarea";
-import { Card, CardContent } from "./components/ui/card";
+import { AppLayout } from "./AppLayout";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
+import { Textarea } from "./ui/textarea";
+import { Card, CardContent } from "./ui/card";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import { Plus, Trash2, Globe, Pencil, Loader2 } from "lucide-react";
-import { EditDialog } from "./components/EditDialog";
-import { FloatingActionButton } from "./components/FloatingActionButton";
+import { EditDialog } from "./EditDialog";
+import { FloatingActionButton } from "./FloatingActionButton";
 
 export default function Platforms() {
   const [searchParams, setSearchParams] = useSearchParams();
