@@ -9,7 +9,7 @@ import { useIsMobile } from "../hooks/use-mobile"
 import { cn } from "./utils"
 import { Button } from "./button"
 import { Input } from "./input"
-import { Separator } from "../components/ui/separator"
+import { Separator } from "./separator"
 import {
   Sheet,
   SheetContent,
