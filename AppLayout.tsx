@@ -1,8 +1,8 @@
 import { Link, useLocation } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
-import { Button } from "../components/ui/button";
-import { ThemeToggle } from "../components/ThemeToggle";
-import { GlobalSearch } from "../components/GlobalSearch";
+import { useAuth } from "./useAuth";
+import { Button } from "./button";
+import { ThemeToggle } from "./ThemeToggle";
+import { GlobalSearch } from "./GlobalSearch";
 import {
   Shield,
   LayoutDashboard,
