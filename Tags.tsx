@@ -1,15 +1,15 @@
-import { trpc } from "./trpc"
+import { trpc } from "../trpc"
 import { AppLayout } from "./AppLayout";
-import { Button } from "./components/ui/button";
-import { Input } from "./components/ui/input";
-import { Label } from "./components/ui/label";
-import { Card, CardContent } from "./components/ui/card";
+import { Button } from "../button";
+import { Input } from "../input";
+import { Label } from "../label";
+import { Card, CardContent } from "../card";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import { Plus, Trash2, Pencil, Loader2 } from "lucide-react";
-import { EditDialog } from "./components/EditDialog";
-import { FloatingActionButton } from "./components/FloatingActionButton";
+import { EditDialog } from "./EditDialog";
+import { FloatingActionButton } from "./FloatingActionButton";
 
 export default function TagsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
