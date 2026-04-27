@@ -9,9 +9,9 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from "./components/ui/command";
+} from "./ui/command";
 import { Search, Loader2, UserCircle, AtSign, AlertTriangle, Shield } from "lucide-react";
-import { Button } from "./components/ui/button";
+import { Button } from "./ui/button";
 
 const EVENT_TYPE_LABELS: Record<string, string> = {
   harassment: "Harassment", defamation: "Defamation", doxxing: "Doxxing", threat: "Threat",
