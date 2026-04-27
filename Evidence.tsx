@@ -12,7 +12,7 @@ import { useState, useRef, useEffect } from "react";
 import { useSearchParams } from "react-router";
 import { toast } from "sonner";
 import { Plus, Trash2, ExternalLink, Pencil, Loader2, Upload, Link2, FileText, X } from "lucide-react";
-import { EditDialog } from "./components/EditDialog";
+import { EditDialog } from "./EditDialog";
 import { FloatingActionButton } from "./FloatingActionButton";
 import { EvidencePreview } from "./EvidencePreview";
 
