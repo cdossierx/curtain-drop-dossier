@@ -1,20 +1,20 @@
 import { trpc } from "./trpc";
-import { AppLayout } from "./components/AppLayout";
-import { Button } from "./components/ui/button";
-import { Input } from "./components/ui/input";
-import { Label } from "./components/ui/label";
-import { Textarea } from "./components/ui/textarea";
-import { Card, CardContent } from "./components/ui/card";
-import { Badge } from "./components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./components/ui/tabs";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./components/ui/select";
+import { AppLayout } from "./AppLayout";
+import { Button } from "./button";
+import { Input } from "./input";
+import { Label } from "./label";
+import { Textarea } from "./textarea";
+import { Card, CardContent } from "./card";
+import { Badge } from "./badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./select";
 import { useState, useRef, useEffect } from "react";
 import { useSearchParams } from "react-router";
 import { toast } from "sonner";
 import { Plus, Trash2, ExternalLink, Pencil, Loader2, Upload, Link2, FileText, X } from "lucide-react";
 import { EditDialog } from "./components/EditDialog";
-import { FloatingActionButton } from "./components/FloatingActionButton";
-import { EvidencePreview } from "./components/EvidencePreview";
+import { FloatingActionButton } from "./FloatingActionButton";
+import { EvidencePreview } from "./EvidencePreview";
 
 const EVIDENCE_TYPES = [
   { value: "screenshot", label: "Screenshot" }, { value: "video_clip", label: "Video Clip" },
