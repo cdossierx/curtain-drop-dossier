@@ -1,6 +1,6 @@
-import { Button } from "./button";
-import { Card, CardContent, CardHeader, CardTitle } from "./card";
-import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Link } from "react-router";
 
 export default function NotFound() {
   return (
