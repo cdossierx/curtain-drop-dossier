@@ -1,10 +1,10 @@
-import { trpc } from "../trpc";
+import { trpc } from "./trpc";
 import { AppLayout } from "./AppLayout";
-import { Button } from "../button";
-import { Input } from "../input";
-import { Label } from "../label";
-import { Textarea } from "../textarea";
-import { Card, CardContent } from "../card";
+import { Button } from "./button";
+import { Input } from "./input";
+import { Label } from "./label";
+import { Textarea } from "./textarea";
+import { Card, CardContent } from "./card";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
