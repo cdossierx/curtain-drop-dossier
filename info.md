@@ -14,8 +14,8 @@ Components (40+):
   spinner, switch, table, tabs, textarea, toggle-group, toggle, tooltip
 
 Usage:
-  import { Button } from '@/components/ui/button'
-  import { Card, CardHeader, CardTitle } from '@/components/ui/card'
+  import { Button } from './button'
+  import { Card, CardHeader, CardTitle } from './card'
 
 Structure:
   src/sections/        Page sections
