@@ -1,5 +1,5 @@
 import { trpc } from "@/providers/trpc";
-import { AppLayout } from "@/components/AppLayout";
+import { AppLayout } from "./AppLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "./card";
 import { Button } from "./button";
 import { toast } from "sonner";

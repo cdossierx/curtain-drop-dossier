@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback } from "react";
 import { trpc } from "@/providers/trpc";
-import { AppLayout } from "@/components/AppLayout";
+import { AppLayout } from "./AppLayout";
 import { Button } from "./button";
 import { Card, CardContent } from "./card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./tabs";

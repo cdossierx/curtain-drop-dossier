@@ -1,5 +1,5 @@
 import { trpc } from "@/providers/trpc";
-import { AppLayout } from "@/components/AppLayout";
+import { AppLayout } from "./AppLayout";
 import { Button } from "./button";
 import { Input } from "./input";
 import { Label } from "./label";
@@ -13,8 +13,8 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router";
 import { toast } from "sonner";
 import { Plus, Trash2, UserCircle, Pencil, Loader2 } from "lucide-react";
-import { EditDialog } from "@/components/EditDialog";
-import { FloatingActionButton } from "@/components/FloatingActionButton";
+import { EditDialog } from "./EditDialog";
+import { FloatingActionButton } from "./FloatingActionButton";
 
 const EVENT_TYPE_LABELS: Record<string, string> = {
   harassment: "Harassment", defamation: "Defamation", doxxing: "Doxxing", threat: "Threat",
