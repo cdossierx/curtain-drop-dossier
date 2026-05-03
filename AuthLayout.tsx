@@ -1,11 +1,11 @@
 import { useAuth } from "../hooks/useAuth";
-import { Avatar, AvatarFallback } from "../components/ui/avatar";
+import { Avatar, AvatarFallback } from "../ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../components/ui/dropdown-menu";
+} from "../ui/dropdown-menu";
 import {
   Sidebar,
   SidebarContent,
@@ -18,7 +18,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
   useSidebar,
-} from "../components/ui/sidebar";
+} from "../ui/sidebar";
 import { LOGIN_PATH } from "../const";
 import { useIsMobile } from "../hooks/use-mobile";
 import { LayoutDashboard, LogOut, PanelLeft, Users } from "lucide-react";

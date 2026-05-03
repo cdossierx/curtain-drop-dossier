@@ -1,1 +1,1 @@
-export * from '../src/components/ui/sliders'
+export * from '../src/ui/sliders'

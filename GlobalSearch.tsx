@@ -9,7 +9,7 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from "./ui/command";
+} from "../ui/command";
 import { Search, Loader2, UserCircle, AtSign, AlertTriangle, Shield } from "lucide-react";
 import { Button } from "../ui/button";
 

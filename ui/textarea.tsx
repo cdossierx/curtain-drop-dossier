@@ -1,1 +1,1 @@
-export * from '../src/components/ui/textara'
+export * from '../src/ui/textara'
