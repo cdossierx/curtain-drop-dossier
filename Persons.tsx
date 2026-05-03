@@ -8,7 +8,7 @@ import { Card, CardContent } from "./card";
 import { Badge } from "./badge";
 import { Skeleton } from "./skeleton";
 import { Progress } from "./progress";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router";
 import { toast } from "sonner";

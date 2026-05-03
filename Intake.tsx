@@ -4,7 +4,7 @@ import { AppLayout } from "./AppLayout";
 import { Button } from "./button";
 import { Card, CardContent } from "./card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./tabs";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
 import { Input } from "./input";
 import { Label } from "./label";
 import { Textarea } from "./textarea";
