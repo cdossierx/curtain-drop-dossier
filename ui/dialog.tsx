@@ -1,1 +1,1 @@
-export {}
+import { dialog } from "./ui/dialog"
