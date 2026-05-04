@@ -1,1 +1,1 @@
-export * from '../src/ui/sliders'
+export * from '../src/ui/slider'
