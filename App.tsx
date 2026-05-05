@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router'
 import Dashboard from './Dashboard'
 import LogIncident from './LogIncident'
-import Timeline from './pages/Timeline'
+import Timeline from './Timeline'
 import Intake from './pages/Intake'
 import Persons from './pages/Persons'
 import Aliases from './pages/Aliases'
