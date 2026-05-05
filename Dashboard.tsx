@@ -1,7 +1,7 @@
 import { trpc } from "@/providers/trpc";
 import { AppLayout } from "./AppLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { Skeleton } from "./ui/skeleton";
+import { Skeleton } from "./skeleton";
 import { Progress } from "./progress";
 import {
   Activity,
