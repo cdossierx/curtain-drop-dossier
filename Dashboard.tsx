@@ -2,7 +2,7 @@ import { trpc } from "@/providers/trpc";
 import { AppLayout } from "./AppLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Skeleton } from "./ui/skeleton";
-import { Progress } from "./ui/progress";
+import { Progress } from "./progress";
 import {
   Activity,
 } from "lucide-react";
