@@ -2,15 +2,15 @@ import { Routes, Route } from 'react-router'
 import Dashboard from './Dashboard'
 import LogIncident from './LogIncident'
 import Timeline from './Timeline'
-import Intake from './pages/Intake'
-import Persons from './pages/Persons'
-import Aliases from './pages/Aliases'
-import Evidence from './pages/Evidence'
-import TagsPage from './pages/Tags'
-import Platforms from './pages/Platforms'
-import Analytics from './pages/Analytics'
-import Settings from './pages/Settings'
-import NotFound from "./pages/NotFound"
+import Intake from './Intake'
+import Persons from './Persons'
+import Aliases from './Aliases'
+import Evidence from './Evidence'
+import TagsPage from './Tags'
+import Platforms from './Platforms'
+import Analytics from './Analytics'
+import Settings from './Settings'
+import NotFound from "./NotFound"
 
 export default function App() {
   return (
