@@ -1,6 +1,6 @@
 import { Routes, Route } from 'react-router'
 import Dashboard from './Dashboard'
-import LogIncident from './pages/LogIncident'
+import LogIncident from './LogIncident'
 import Timeline from './pages/Timeline'
 import Intake from './pages/Intake'
 import Persons from './pages/Persons'
