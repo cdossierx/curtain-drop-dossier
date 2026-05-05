@@ -2,7 +2,7 @@ import { trpc } from "./providers/trpc";
 import { AppLayout } from "./AppLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
-import { Skeleton } from "./ui/skeleton";
+import { Skeleton } from "./skeleton";
 import { Download } from "lucide-react";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
