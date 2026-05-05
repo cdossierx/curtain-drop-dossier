@@ -1,7 +1,7 @@
 import { trpc } from "@/providers/trpc";
-import { AppLayout } from "./AppLayout";
-import { Card, CardContent, CardHeader, CardTitle } from "./card";
-import { Button } from "./button";
+import { AppLayout } from "@/components/AppLayout";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Download, RotateCcw, Shield, Database, AlertTriangle, CheckCircle, FileJson, Archive, FileImage, Tag } from "lucide-react";
 

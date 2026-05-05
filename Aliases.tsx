@@ -1,18 +1,18 @@
 import { trpc } from "@/providers/trpc";
-import { AppLayout } from "./AppLayout";
-import { Button } from "./button";
-import { Input } from "./input";
-import { Label } from "./label";
-import { Textarea } from "./textarea";
-import { Card, CardContent } from "./card";
-import { Badge } from "./badge";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./select";
+import { AppLayout } from "@/components/AppLayout";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router";
 import { toast } from "sonner";
 import { Plus, Trash2, AtSign, Pencil, Loader2 } from "lucide-react";
-import { EditDialog } from "./EditDialog";
-import { FloatingActionButton } from "./FloatingActionButton";
+import { EditDialog } from "@/components/EditDialog";
+import { FloatingActionButton } from "@/components/FloatingActionButton";
 
 const CONFIDENCE_LABELS: Record<string, string> = {
   confirmed: "Confirmed", strong_evidence: "Strong", moderate_evidence: "Moderate", unverified: "Unverified", disputed: "Disputed",

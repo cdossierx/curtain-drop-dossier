@@ -1,19 +1,19 @@
-import { trpc } from "./src/providers/trpc";
-import { AppLayout } from "./AppLayout";
-import { Card, CardContent } from "./card";
-import { Input } from "./input";
-import { Button } from "./button";
-import { Badge } from "./badge";
-import { Skeleton } from "./skeleton";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./select";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
+import { trpc } from "@/providers/trpc";
+import { AppLayout } from "@/components/AppLayout";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router";
 import { Clock, Trash2, ExternalLink, X, Filter, Pencil, Link2, Unlink, FileImage } from "lucide-react";
 import { toast } from "sonner";
-import { EditIncident } from "./EditIncident";
-import { FloatingActionButton } from "./FloatingActionButton";
-import { EvidencePreview } from "./EvidencePreview";
+import { EditIncident } from "@/components/EditIncident";
+import { FloatingActionButton } from "@/components/FloatingActionButton";
+import { EvidencePreview } from "@/components/EvidencePreview";
 
 const EVENT_TYPE_LABELS: Record<string, string> = {
   harassment: "Harassment", defamation: "Defamation", doxxing: "Doxxing", threat: "Threat",
