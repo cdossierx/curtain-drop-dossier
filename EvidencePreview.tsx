@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Dialog, DialogContent } from ".ui/dialog";
+import { Dialog, DialogContent } from "./dialog";
 import { FileImage, FileText, FileAudio, Film, ScrollText, MessageSquare, Scale, Globe, File } from "lucide-react";
 
 interface EvidenceItem {
