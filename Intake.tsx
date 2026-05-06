@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback } from "react";
-import { trpc } from "@/providers/trpc";
+import { trpc } from "./providers/trpc";
 import { AppLayout } from "./AppLayout";
 import { Button } from "./button";
 import { Card, CardContent } from "./card";
@@ -8,7 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./dialog";
 import { Input } from "./input";
 import { Label } from "./label";
 import { Textarea } from "./textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./select";
 import { Badge } from "./badge";
 import { Separator } from "./separator";
 import { toast } from "sonner";
