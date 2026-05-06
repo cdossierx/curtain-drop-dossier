@@ -1,1 +1,1 @@
-export * from '../src/ui/card'
+export * from './card'
