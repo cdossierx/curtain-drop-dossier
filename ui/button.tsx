@@ -1,1 +1,1 @@
-export * from '../src/ui/button'
+export * from '../button'
