@@ -1,1 +1,1 @@
-export * from '../src/providers/trpc'
+export * from '../providers/trpc'
