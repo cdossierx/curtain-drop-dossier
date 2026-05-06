@@ -1,1 +1,1 @@
-export * from '../src/ui/command'
+export * from '../command'
