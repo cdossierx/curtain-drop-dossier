@@ -1,1 +1,1 @@
-export * from '../providers/trpc'
+export const trpc = createTRPCReact<AppRouter>();
