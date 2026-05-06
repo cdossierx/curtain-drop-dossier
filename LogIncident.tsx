@@ -5,7 +5,7 @@ import { Input } from "./input";
 import { Label } from "./label";
 import { Textarea } from "./textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "./card";
-import { Slider } from "./sliders";
+import { Slider } from "./slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./select";
 import { useState } from "react";
 import { useNavigate } from "react-router";
