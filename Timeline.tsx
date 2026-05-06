@@ -11,9 +11,9 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router";
 import { Clock, Trash2, ExternalLink, X, Filter, Pencil, Link2, Unlink, FileImage } from "lucide-react";
 import { toast } from "sonner";
-import { EditIncident } from "@/components/EditIncident";
-import { FloatingActionButton } from "@/components/FloatingActionButton";
-import { EvidencePreview } from "@/components/EvidencePreview";
+import { EditIncident } from "./EditIncident";
+import { FloatingActionButton } from "./FloatingActionButton";
+import { EvidencePreview } from "./EvidencePreview";
 
 const EVENT_TYPE_LABELS: Record<string, string> = {
   harassment: "Harassment", defamation: "Defamation", doxxing: "Doxxing", threat: "Threat",
