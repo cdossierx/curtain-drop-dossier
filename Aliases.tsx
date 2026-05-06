@@ -1,10 +1,10 @@
 import { trpc } from "@/providers/trpc";
-import { AppLayout } from "./AppLayout";
+import { AppLayout } from ".//AppLayout";
 import { Button } from "./button";
 import { Input } from "./input";
 import { Label } from "./label";
 import { Textarea } from "./textarea";
-import { Card, CardContent } from "./card";
+import { Card, CardContent } from "./ui./card";
 import { Badge } from "./badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./select";
 import { useState, useEffect } from "react";
