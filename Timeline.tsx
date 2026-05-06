@@ -6,7 +6,7 @@ import { Button } from "./button";
 import { Badge } from "./badge";
 import { Skeleton } from "./skeleton";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./select";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./dialog";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router";
 import { Clock, Trash2, ExternalLink, X, Filter, Pencil, Link2, Unlink, FileImage } from "lucide-react";
