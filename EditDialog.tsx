@@ -2,7 +2,7 @@ import { Button } from "./button";
 import { Input } from "./input";
 import { Label } from "./label";
 import { Textarea } from "./textarea";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./Dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./select";
 import { useState, useEffect } from "react";
 import { Save, X } from "lucide-react";

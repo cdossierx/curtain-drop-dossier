@@ -25,7 +25,7 @@ import { LayoutDashboard, LogOut, PanelLeft, Users } from "lucide-react";
 import { type CSSProperties, type ReactNode, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-com";
 import { AuthLayoutSkeleton } from "./AuthLayoutSkeleton";
-import { Button } from "./ui/button";
+import { Button } from "./button";
 
 const menuItems = [
   { icon: LayoutDashboard, label: "Page 1", path: "/" },

@@ -1,5 +1,5 @@
 import { trpc } from "@/providers/trpc";
-import { AppLayout } from ".//AppLayout";
+import { AppLayout } from "./AppLayout";
 import { Button } from "./button";
 import { Input } from "./input";
 import { Label } from "./label";
