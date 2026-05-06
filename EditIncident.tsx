@@ -4,7 +4,7 @@ import { Input } from "./input";
 import { Label } from "./label";
 import { Textarea } from "./textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "./card";
-import { Slider } from "./sliders";
+import { Slider } from "./slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./dialog";
 import { useState, useEffect } from "react";
