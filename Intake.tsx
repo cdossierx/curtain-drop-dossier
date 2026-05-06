@@ -1,16 +1,16 @@
 import { useState, useRef, useCallback } from "react";
 import { trpc } from "@/providers/trpc";
-import { AppLayout } from "@/components/AppLayout";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
+import { AppLayout } from "./AppLayout";
+import { Button } from "./button";
+import { Card, CardContent } from "./card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./tabs";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./dialog";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
+import { Textarea } from "./ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
+import { Badge } from "./ui/badge";
+import { Separator } from "./ui/separator";
 import { toast } from "sonner";
 import {
   Upload, FileText, Trash2, Link2, Plus, Loader2,
