@@ -10,7 +10,7 @@ import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { Badge } from "./badge";
-import { Separator } from "./ui/separator";
+import { Separator } from "./separator";
 import { toast } from "sonner";
 import {
   Upload, FileText, Trash2, Link2, Plus, Loader2,
