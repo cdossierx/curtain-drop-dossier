@@ -1,1 +1,1 @@
-export * from '../src/ui/select'
+export * from '../select'
