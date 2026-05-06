@@ -1,1 +1,1 @@
-export * from '../textara'
+export * from './textara'
