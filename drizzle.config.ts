@@ -7,7 +7,7 @@ if (!connectionString) {
 }
 
 export default defineConfig({
-  schema: "./db/schema.ts",
+  schema: "./schema.ts",
   out: "./db/migrations",
   dialect: "mysql",
   dbCredentials: {

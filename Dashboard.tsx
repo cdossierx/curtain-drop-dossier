@@ -38,12 +38,7 @@ const STATUS_LABELS: Record<string, string> = {
 };
 
 export default function Dashboard() {
-  const { data: stats, isLoading: statsLoading } = trpc.incidents.stats.useQuery();
-  const { data: personStats } = trpc.persons.stats.useQuery();
-  const { data: personsList } = trpc.persons.list.useQuery();
-  const navigate = useNavigate();
-  const { data: evidenceStats } = trpc.evidence.stats.useQuery();
-  const { data: platformStats } = trpc.platforms.stats.useQuery();
+                                                                                                                     
 
   // Map personId to display name
   const personNameMap: Record<number, string> = {};

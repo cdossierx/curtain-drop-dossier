@@ -7,23 +7,13 @@ import { httpBatchLink } from '@trpc/client';
 import { trpc } from '../providers/trpc';
 
 const queryClient = new QueryClient();
-
-const trpcClient = trpc.createClient({
-  links: [
-    httpBatchLink({
-      url: '/trpc',
-    }),
-  ],
-});
-
+ 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <trpc.Provider client={trpcClient} queryClient={queryClient}>
-      <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </QueryClientProvider>
-    </trpc.Provider>
-  </React.StrictMode>
+<React.StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </QueryClientProvider>
+ </React.StrictMode>
 );
