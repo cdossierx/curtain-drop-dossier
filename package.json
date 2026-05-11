@@ -5,10 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && tsc"
-    "lint": "eslint .",
+    "build": "vite build && tsc -p tsconfig.node.json",
     "preview": "vite preview",
-    "start": node dist/api/boot.js"
+    "start": "node dist/boot.js",
     "check": "tsc -b",
     "format": "prettier --write .",
     "test": "vitest run",

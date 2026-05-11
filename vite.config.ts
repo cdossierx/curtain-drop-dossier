@@ -7,12 +7,12 @@ export default defineConfig({
 
   server: {
     host: "0.0.0.0",
-    allowedHosts: ["curtain-drop-dossier-production.up.railway.app"]
+    allowedHosts: ["curtain-drop-dossier-web.onrender.com"]
   },
 
   preview: {
     host: "0.0.0.0",
-    allowedHosts: ["curtain-drop-dossier-production.up.railway.app"]
+    allowedHosts: ["curtain-drop-dossier-web.onrender.com"]
   },
 
   resolve: {
