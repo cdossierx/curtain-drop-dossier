@@ -1,4 +1,4 @@
-import { trpc } from "./trpc";
+import { trpc } from "./providers/trpc";
 import { Button } from "./button";
 import { Input } from "./input";
 import { Label } from "./label";

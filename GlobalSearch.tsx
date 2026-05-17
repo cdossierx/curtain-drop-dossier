@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { trpc } from "./trpc";
+import { trpc } from "./providers/trpc";
 import {
   CommandDialog,
   CommandEmpty,

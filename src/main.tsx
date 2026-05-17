@@ -5,13 +5,15 @@ import App from '../App';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { httpBatchLink } from '@trpc/client';
 import { trpc } from '../providers/trpc';
+import superjson from 'superjson';
 
 const queryClient = new QueryClient();
 
 const trpcClient = trpc.createClient({
   links: [
     httpBatchLink({
-      url: '/trpc',
+      url: '/api/trpc',
+      transformer: superjson,
     }),
   ],
 });
