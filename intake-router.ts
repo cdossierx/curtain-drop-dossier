@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { createRouter, publicQuery } from "./middleware";
-import { getDb } from "./queries/connection";
+import { getDb } from "./connection";
 import { intakeQueue, evidenceFiles, incidents, incidentTags } from "@db/schema";
 import { eq, and, desc } from "drizzle-orm";
 import { TRPCError } from "@trpc/server";

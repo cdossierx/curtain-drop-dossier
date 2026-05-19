@@ -1,9 +1,17 @@
 import path from "path";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import devServer, { defaultOptions } from "@hono/vite-dev-server";
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    devServer({
+      entry: "boot.ts",
+      // Let Vite keep serving the React app; Hono should only own API routes.
+      exclude: [/^(?!\/api(?:\/|$)).*/, ...defaultOptions.exclude],
+    }),
+  ],
   
   
   
@@ -22,6 +30,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(process.cwd()),
+      "@db": path.resolve(process.cwd()),
     },
   },
 });

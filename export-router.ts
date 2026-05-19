@@ -1,5 +1,5 @@
 import { createRouter, authedQuery } from "./middleware";
-import { getDb } from "./queries/connection";
+import { getDb } from "./connection";
 import { incidents, persons, aliases, evidenceFiles, tags, platforms, incidentTags, relatedIncidents } from "@db/schema";
 import { eq, isNull, sql, and } from "drizzle-orm";
 
