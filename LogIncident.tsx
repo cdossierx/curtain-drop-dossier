@@ -6,7 +6,7 @@ import { Label } from "./label";
 import { Textarea } from "./textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "./card";
 import { Slider } from "./slider";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, SELECT_NONE_VALUE, optionalNumericIdFromSelect } from "./select";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
@@ -62,6 +62,10 @@ export default function LogIncident() {
   const { data: aliases } = trpc.aliases.list.useQuery();
   const { data: platforms } = trpc.platforms.list.useQuery();
   const { data: tags } = trpc.tags.list.useQuery();
+  const personList = persons ?? [];
+  const aliasList = aliases ?? [];
+  const platformList = platforms ?? [];
+  const tagList = tags ?? [];
 
   const [form, setForm] = useState({
     incidentDate: new Date().toISOString().split("T")[0],
@@ -107,9 +111,9 @@ export default function LogIncident() {
       title: form.title || undefined,
       description: form.description,
       transcript: form.transcript || undefined,
-      personId: form.personId ? Number(form.personId) : undefined,
-      aliasId: form.aliasId ? Number(form.aliasId) : undefined,
-      platformId: form.platformId ? Number(form.platformId) : undefined,
+      personId: optionalNumericIdFromSelect(form.personId),
+      aliasId: optionalNumericIdFromSelect(form.aliasId),
+      platformId: optionalNumericIdFromSelect(form.platformId),
       attackerName: form.attackerName || undefined,
       platform: form.platform || undefined,
       eventType: form.eventType as
@@ -120,9 +124,11 @@ export default function LogIncident() {
       mentalHealthImpact: form.mentalHealthImpact[0],
       status: form.status as "unreviewed" | "logged" | "verified" | "archived" | "included_in_report",
       confidenceLevel: form.confidenceLevel as "confirmed" | "strong_evidence" | "moderate_evidence" | "unverified" | "disputed",
-      sourceType: form.sourceType as
-        "screenshot" | "video_clip" | "full_video" | "audio_recording" |
-        "transcript" | "chat_log" | "court_document" | "social_media_post" | "eyewitness" | "third_party" | undefined,
+      sourceType: form.sourceType && form.sourceType !== SELECT_NONE_VALUE
+        ? (form.sourceType as
+          "screenshot" | "video_clip" | "full_video" | "audio_recording" |
+          "transcript" | "chat_log" | "court_document" | "social_media_post" | "eyewitness" | "third_party")
+        : undefined,
       capturedBy: form.capturedBy || undefined,
       captureDate: form.captureDate || undefined,
       lieTopic: form.lieTopic || undefined,
@@ -221,7 +227,7 @@ export default function LogIncident() {
                       <SelectTrigger><SelectValue placeholder="Select person..." /></SelectTrigger>
                       <SelectContent>
                         <SelectItem value="">None</SelectItem>
-                        {persons?.map((p) => <SelectItem key={p.id} value={String(p.id)}>{p.displayName}</SelectItem>)}
+                        {personList.map((p) => <SelectItem key={p.id} value={String(p.id)}>{p.displayName || `Person #${p.id}`}</SelectItem>)}
                       </SelectContent>
                     </Select>
                   </div>
@@ -230,8 +236,8 @@ export default function LogIncident() {
                     <Select value={form.aliasId} onValueChange={(v) => setForm({ ...form, aliasId: v })}>
                       <SelectTrigger><SelectValue placeholder="Select alias..." /></SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">None</SelectItem>
-                        {aliases?.map((a) => <SelectItem key={a.id} value={String(a.id)}>{a.alias}</SelectItem>)}
+                        <SelectItem value={SELECT_NONE_VALUE}>None</SelectItem>
+                        {aliasList.map((a) => <SelectItem key={a.id} value={String(a.id)}>{a.alias || `Alias #${a.id}`}</SelectItem>)}
                       </SelectContent>
                     </Select>
                   </div>
@@ -240,8 +246,8 @@ export default function LogIncident() {
                     <Select value={form.platformId} onValueChange={(v) => setForm({ ...form, platformId: v })}>
                       <SelectTrigger><SelectValue placeholder="Select platform..." /></SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">None</SelectItem>
-                        {platforms?.map((p) => <SelectItem key={p.id} value={String(p.id)}>{p.name}</SelectItem>)}
+                        <SelectItem value={SELECT_NONE_VALUE}>None</SelectItem>
+                        {platformList.map((p) => <SelectItem key={p.id} value={String(p.id)}>{p.name || `Platform #${p.id}`}</SelectItem>)}
                       </SelectContent>
                     </Select>
                   </div>
@@ -257,7 +263,7 @@ export default function LogIncident() {
                     <Label>Source Type</Label>
                     <Select value={form.sourceType} onValueChange={(v) => setForm({ ...form, sourceType: v })}>
                       <SelectTrigger><SelectValue placeholder="Select..." /></SelectTrigger>
-                      <SelectContent>{SOURCE_TYPES.map((s) => <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>)}</SelectContent>
+                      <SelectContent><SelectItem value={SELECT_NONE_VALUE}>None</SelectItem>{SOURCE_TYPES.map((s) => <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>)}</SelectContent>
                     </Select>
                   </div>
                   <div className="grid grid-cols-2 gap-3">
@@ -271,7 +277,7 @@ export default function LogIncident() {
                 <CardHeader className="pb-3"><CardTitle className="text-sm">Tags</CardTitle></CardHeader>
                 <CardContent>
                   <div className="flex flex-wrap gap-2">
-                    {tags?.map((tag) => (
+                    {tagList.map((tag) => (
                       <button key={tag.id} type="button"
                         onClick={() => toggleTag(tag.id)}
                         className={`px-2.5 py-1 rounded-full text-xs font-medium transition-colors ${
@@ -282,7 +288,7 @@ export default function LogIncident() {
                         {tag.name}
                       </button>
                     ))}
-                    {(!tags || tags.length === 0) && <p className="text-xs text-muted-foreground">No tags created yet</p>}
+                    {tagList.length === 0 && <p className="text-xs text-muted-foreground">No tags created yet</p>}
                   </div>
                 </CardContent>
               </Card>
@@ -304,8 +310,8 @@ export default function LogIncident() {
             </Button>
             <Button type="button" variant="outline" onClick={() => setForm({
               incidentDate: new Date().toISOString().split("T")[0], incidentTime: "", title: "", description: "", transcript: "",
-              personId: "", aliasId: "", platformId: "", attackerName: "", platform: "", eventType: "harassment",
-              severity: [3], mentalHealthImpact: [5], status: "unreviewed", confidenceLevel: "unverified", sourceType: "",
+              personId: SELECT_NONE_VALUE, aliasId: SELECT_NONE_VALUE, platformId: SELECT_NONE_VALUE, attackerName: "", platform: "", eventType: "harassment",
+              severity: [3], mentalHealthImpact: [5], status: "unreviewed", confidenceLevel: "unverified", sourceType: SELECT_NONE_VALUE,
               capturedBy: "", captureDate: "", lieTopic: "", notes: "", context: "", tagIds: [],
             })}>
               <RotateCcw className="h-4 w-4 mr-2" />Reset

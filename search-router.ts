@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { createRouter, publicQuery } from "./middleware";
-import { getDb } from "./queries/connection";
+import { getDb } from "./connection";
 import { incidents, persons, aliases, evidenceFiles, tags, intakeQueue } from "@db/schema";
 import { eq, isNull, sql, and } from "drizzle-orm";
 

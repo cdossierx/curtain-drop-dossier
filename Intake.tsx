@@ -8,7 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./dialog";
 import { Input } from "./input";
 import { Label } from "./label";
 import { Textarea } from "./textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, SELECT_NONE_VALUE, optionalNumericIdFromSelect } from "./select";
 import { Badge } from "./badge";
 import { Separator } from "./separator";
 import { toast } from "sonner";
@@ -78,6 +78,9 @@ export default function Intake() {
   const { data: itemDetail } = trpc.intake.getById.useQuery(
     { id: detailItem! }, { enabled: !!detailItem }
   );
+  const intakeItems = items ?? [];
+  const personList = persons ?? [];
+  const incidentList = incidents ?? [];
 
   const discardMutation = trpc.intake.discard.useMutation({
     onSuccess: () => { toast.success("Discarded"); utils.intake.list.invalidate(); utils.intake.stats.invalidate(); },
@@ -171,19 +174,18 @@ export default function Intake() {
   };
 
   // ── Helpers ───────────────────────────────────────────────────
-  const checkImage = (mime: string | null) => mime?.startsWith("image/") ?? false;
-  const checkPdf = (mime: string | null) => mime === "application/pdf";
+  const checkImage = (mime: string | null | undefined) => mime?.startsWith("image/") ?? false;
+  const checkPdf = (mime: string | null | undefined) => mime === "application/pdf";
 
   const toggleSelect = (id: number) => {
     setSelectedIntakeIds(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
   };
 
   const openDraft = (ids?: number[]) => {
-    if (ids && ids.length > 0) {
-      setSelectedIntakeIds(ids);
-    }
+    const selectedIds = ids && ids.length > 0 ? ids : selectedIntakeIds;
+    if (ids && ids.length > 0) setSelectedIntakeIds(ids);
     // Pre-fill from selected items
-    const selected = items?.filter(i => selectedIntakeIds.includes(i.id)) || [];
+    const selected = intakeItems.filter(i => selectedIds.includes(i.id));
     const texts = selected.map(s => s.transcriptText || s.extractedText).filter(Boolean);
     if (texts.length > 0) {
       setDraftForm(prev => ({ ...prev, transcript: texts.join("\n\n---\n\n").substring(0, 5000) }));
@@ -339,7 +341,7 @@ export default function Intake() {
             {/* Items list */}
             {isLoading ? (
               <div className="text-sm text-muted-foreground">Loading...</div>
-            ) : items?.length === 0 ? (
+            ) : intakeItems.length === 0 ? (
               <Card>
                 <CardContent className="py-10 text-center">
                   <InboxIcon className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
@@ -351,7 +353,7 @@ export default function Intake() {
               </Card>
             ) : (
               <div className="space-y-3">
-                {items?.map((item) => (
+                {intakeItems.map((item) => (
                   <IntakeCard
                     key={item.id}
                     item={item}
@@ -404,7 +406,7 @@ export default function Intake() {
                   {/* Metadata */}
                   <div className="flex flex-wrap gap-2 text-xs">
                     <Badge variant="outline">{itemDetail.mimeType || "unknown"}</Badge>
-                    <Badge variant="outline">{(itemDetail.fileSize / 1024).toFixed(0)} KB</Badge>
+                    <Badge variant="outline">{((itemDetail.fileSize || 0) / 1024).toFixed(0)} KB</Badge>
                     <Badge variant="outline">{STATUS_LABELS[itemDetail.status]}</Badge>
                     <Badge variant="outline">{itemDetail.sourceType}</Badge>
                   </div>
@@ -471,7 +473,8 @@ export default function Intake() {
               <Select value={linkIncidentId} onValueChange={setLinkIncidentId}>
                 <SelectTrigger><SelectValue placeholder="Choose an incident..." /></SelectTrigger>
                 <SelectContent>
-                  {incidents?.map((inc) => (
+                  {incidentList.length === 0 && <SelectItem value={SELECT_NONE_VALUE} disabled>No incidents available</SelectItem>}
+                  {incidentList.map((inc) => (
                     <SelectItem key={inc.id} value={String(inc.id)}>
                       #{inc.id} {inc.title || ""} ({new Date(inc.incidentDate).toLocaleDateString()})
                     </SelectItem>
@@ -507,7 +510,7 @@ export default function Intake() {
                 <div className="space-y-1"><Label>Person</Label>
                   <Select value={draftForm.personId} onValueChange={v => setDraftForm(p => ({ ...p, personId: v }))}>
                     <SelectTrigger><SelectValue placeholder="Select..." /></SelectTrigger>
-                    <SelectContent>{persons?.map(p => <SelectItem key={p.id} value={String(p.id)}>{p.displayName}</SelectItem>)}</SelectContent>
+                    <SelectContent><SelectItem value={SELECT_NONE_VALUE}>None</SelectItem>{personList.map(p => <SelectItem key={p.id} value={String(p.id)}>{p.displayName || `Person #${p.id}`}</SelectItem>)}</SelectContent>
                   </Select>
                 </div>
                 <div className="space-y-1"><Label>Attacker/Alias</Label><Input value={draftForm.attackerName} onChange={e => setDraftForm(p => ({ ...p, attackerName: e.target.value }))} placeholder="@username or name" /></div>
@@ -537,7 +540,7 @@ export default function Intake() {
                     mentalHealthImpact: draftForm.mentalHealthImpact,
                     confidenceLevel: draftForm.confidenceLevel,
                     transcript: draftForm.transcript || undefined,
-                    personId: draftForm.personId ? Number(draftForm.personId) : undefined,
+                    personId: optionalNumericIdFromSelect(draftForm.personId),
                     tagIds: draftForm.tagIds.length > 0 ? draftForm.tagIds : undefined,
                   })}>
                   {draftMutation.isPending && <Loader2 className="h-3 w-3 mr-1 animate-spin" />}
@@ -573,15 +576,17 @@ function IntakeCard({
   onDiscard: () => void;
   onRestore: () => void;
   onLink: () => void;
-  isImageFn: (mime: string | null) => boolean;
-  isPdfFn: (mime: string | null) => boolean;
+  isImageFn: (mime: string | null | undefined) => boolean;
+  isPdfFn: (mime: string | null | undefined) => boolean;
   expandedText: boolean;
   onToggleText: () => void;
 }) {
-  const hasText = item.extractedText || item.transcriptText;
+  const hasText = item?.extractedText || item?.transcriptText;
   const textPreview = hasText ? (hasText as string).substring(0, 200) : "";
-  const isDiscarded = item.status === "discarded";
-  const isConverted = item.status === "converted";
+  const isDiscarded = item?.status === "discarded";
+  const isConverted = item?.status === "converted";
+  const fileSizeKb = ((item?.fileSize || 0) / 1024).toFixed(0);
+  const mimeLabel = (item?.mimeType || "file").split("/").pop()?.toUpperCase() || "FILE";
 
   return (
     <Card className={`${isSelected ? "ring-2 ring-primary" : ""} ${isDiscarded ? "opacity-60" : ""}`}>
@@ -600,11 +605,11 @@ function IntakeCard({
 
           {/* Thumbnail / icon */}
           <button onClick={onView} className="shrink-0">
-            {isImageFn(item.mimeType) ? (
+            {isImageFn(item?.mimeType) && item?.filePath ? (
               <div className="w-16 h-16 rounded-lg overflow-hidden bg-secondary">
                 <img src={item.filePath} alt="" className="w-full h-full object-cover" loading="lazy" />
               </div>
-            ) : isPdfFn(item.mimeType) ? (
+            ) : isPdfFn(item?.mimeType) ? (
               <div className="w-16 h-16 rounded-lg bg-red-50 dark:bg-red-950 flex items-center justify-center">
                 <FileText className="h-8 w-8 text-red-500" />
               </div>
@@ -619,19 +624,19 @@ function IntakeCard({
           <div className="flex-1 min-w-0 space-y-1">
             <div className="flex items-center gap-2 flex-wrap">
               <button onClick={onView} className="text-left">
-                <span className="font-medium text-sm truncate">{item.originalFilename}</span>
+                <span className="font-medium text-sm truncate">{item?.originalFilename || `Intake item #${item?.id ?? ""}`}</span>
               </button>
               <Badge variant="outline" className="text-[10px]">
-                {(item.mimeType || "").split("/").pop()?.toUpperCase()}
+                {mimeLabel}
               </Badge>
-              <Badge className="text-[10px]" variant={item.status === "pending" ? "secondary" : item.status === "converted" ? "default" : "outline"}>
-                {STATUS_LABELS[item.status]}
+              <Badge className="text-[10px]" variant={item?.status === "pending" ? "secondary" : item?.status === "converted" ? "default" : "outline"}>
+                {STATUS_LABELS[item?.status] || item?.status || "Unknown"}
               </Badge>
-              {item.sourceType === "paste" && <Badge variant="outline" className="text-[10px]">Pasted</Badge>}
+              {item?.sourceType === "paste" && <Badge variant="outline" className="text-[10px]">Pasted</Badge>}
             </div>
 
             <div className="flex items-center gap-3 text-xs text-muted-foreground">
-              <span>{(item.fileSize / 1024).toFixed(0)} KB</span>
+              <span>{fileSizeKb} KB</span>
               {hasText && <span>{(hasText as string).length} chars</span>}
             </div>
 
@@ -656,7 +661,7 @@ function IntakeCard({
             )}
 
             {/* Scanned PDF warning */}
-            {isPdfFn(item.mimeType) && !hasText && (
+            {isPdfFn(item?.mimeType) && !hasText && (
               <p className="text-xs text-amber-600 flex items-center gap-1">
                 <AlertTriangle className="h-3 w-3" /> Scanned/image PDF — no selectable text
               </p>
@@ -678,7 +683,7 @@ function IntakeCard({
             {isConverted && (
               <p className="text-xs text-green-600 mt-1 flex items-center gap-1">
                 <CheckCircle className="h-3 w-3" />
-                {item.linkedIncidentId ? "Linked to incident" : "Saved as evidence"}
+                {item?.linkedIncidentId ? "Linked to incident" : "Saved as evidence"}
               </p>
             )}
           </div>

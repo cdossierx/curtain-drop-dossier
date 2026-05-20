@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { trpc } from "./trpc";
+import { trpc } from "./providers/trpc";
 import {
   CommandDialog,
   CommandEmpty,
@@ -30,6 +30,12 @@ export function GlobalSearch() {
     { enabled: query.trim().length > 0 }
   );
 
+  const incidents = results?.incidents ?? [];
+  const persons = results?.persons ?? [];
+  const aliases = results?.aliases ?? [];
+  const evidence = results?.evidence ?? [];
+  const tags = results?.tags ?? [];
+
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === "k") {
@@ -53,10 +59,7 @@ export function GlobalSearch() {
     }
   }, [navigate]);
 
-  const hasResults = results && (
-    results.incidents.length > 0 || results.persons.length > 0 ||
-    results.aliases.length > 0 || results.evidence.length > 0 || results.tags.length > 0
-  );
+  const hasResults = incidents.length > 0 || persons.length > 0 || aliases.length > 0 || evidence.length > 0 || tags.length > 0;
 
   return (
     <>
@@ -85,9 +88,9 @@ export function GlobalSearch() {
             </div>
           )}
 
-          {results?.incidents && results.incidents.length > 0 && (
-            <CommandGroup heading={`Incidents (${results.incidents.length})`}>
-              {results.incidents.map((inc) => (
+          {incidents.length > 0 && (
+            <CommandGroup heading={`Incidents (${incidents.length})`}>
+              {incidents.map((inc) => (
                 <CommandItem key={`inc-${inc.id}`} onSelect={() => handleSelect("incident", inc.id)} className="flex items-start gap-2 py-2">
                   <AlertTriangle className="h-4 w-4 text-red-500 shrink-0 mt-0.5" />
                   <div className="min-w-0">
@@ -103,15 +106,15 @@ export function GlobalSearch() {
               ))}
             </CommandGroup>
           )}
-          {results?.incidents && results.incidents.length > 0 && <CommandSeparator />}
+          {incidents.length > 0 && <CommandSeparator />}
 
-          {results?.persons && results.persons.length > 0 && (
-            <CommandGroup heading={`Persons (${results.persons.length})`}>
-              {results.persons.map((p) => (
+          {persons.length > 0 && (
+            <CommandGroup heading={`Persons (${persons.length})`}>
+              {persons.map((p) => (
                 <CommandItem key={`per-${p.id}`} onSelect={() => handleSelect("person", p.id)} className="flex items-start gap-2 py-2">
                   <UserCircle className="h-4 w-4 text-blue-500 shrink-0 mt-0.5" />
                   <div className="min-w-0">
-                    <p className="text-sm font-medium truncate">{p.displayName}</p>
+                    <p className="text-sm font-medium truncate">{p.displayName || `Person #${p.id}`}</p>
                     {p.firstSeenDate && <p className="text-xs text-muted-foreground">First seen: {new Date(p.firstSeenDate).toLocaleDateString()}</p>}
                     {p.notes && <p className="text-xs text-muted-foreground truncate">{p.notes}</p>}
                   </div>
@@ -119,15 +122,15 @@ export function GlobalSearch() {
               ))}
             </CommandGroup>
           )}
-          {results?.persons && results.persons.length > 0 && <CommandSeparator />}
+          {persons.length > 0 && <CommandSeparator />}
 
-          {results?.aliases && results.aliases.length > 0 && (
-            <CommandGroup heading={`Aliases (${results.aliases.length})`}>
-              {results.aliases.map((a) => (
+          {aliases.length > 0 && (
+            <CommandGroup heading={`Aliases (${aliases.length})`}>
+              {aliases.map((a) => (
                 <CommandItem key={`alias-${a.id}`} onSelect={() => handleSelect("alias", a.id)} className="flex items-start gap-2 py-2">
                   <AtSign className="h-4 w-4 text-purple-500 shrink-0 mt-0.5" />
                   <div className="min-w-0">
-                    <p className="text-sm font-medium truncate">{a.alias}</p>
+                    <p className="text-sm font-medium truncate">{a.alias || `Alias #${a.id}`}</p>
                     {a.suspectedOperator && <p className="text-xs text-muted-foreground">Suspected: {a.suspectedOperator}</p>}
                     <p className="text-xs text-muted-foreground">Confidence: {a.confidence}</p>
                   </div>
@@ -135,11 +138,11 @@ export function GlobalSearch() {
               ))}
             </CommandGroup>
           )}
-          {results?.aliases && results.aliases.length > 0 && <CommandSeparator />}
+          {aliases.length > 0 && <CommandSeparator />}
 
-          {results?.evidence && results.evidence.length > 0 && (
-            <CommandGroup heading={`Evidence (${results.evidence.length})`}>
-              {results.evidence.map((ev) => (
+          {evidence.length > 0 && (
+            <CommandGroup heading={`Evidence (${evidence.length})`}>
+              {evidence.map((ev) => (
                 <CommandItem key={`ev-${ev.id}`} onSelect={() => handleSelect("evidence", ev.id)} className="flex items-start gap-2 py-2">
                   {ev.storageType === "upload" && ev.filePath ? (
                     <div className="w-6 h-6 rounded overflow-hidden bg-secondary shrink-0 mt-0.5">
@@ -147,22 +150,22 @@ export function GlobalSearch() {
                     </div>
                   ) : <Shield className="h-4 w-4 text-green-500 shrink-0 mt-0.5" />}
                   <div className="min-w-0">
-                    <p className="text-sm font-medium truncate">{ev.fileName}</p>
-                    <p className="text-xs text-muted-foreground">{ev.evidenceType.replace("_", " ")}{ev.storageType === "upload" && " · Uploaded"}</p>
+                    <p className="text-sm font-medium truncate">{ev.fileName || `Evidence #${ev.id}`}</p>
+                    <p className="text-xs text-muted-foreground">{(ev.evidenceType || "evidence").replace("_", " ")}{ev.storageType === "upload" && " · Uploaded"}</p>
                     {ev.description && <p className="text-xs text-muted-foreground truncate">{ev.description}</p>}
                   </div>
                 </CommandItem>
               ))}
             </CommandGroup>
           )}
-          {results?.evidence && results.evidence.length > 0 && <CommandSeparator />}
+          {evidence.length > 0 && <CommandSeparator />}
 
-          {results?.tags && results.tags.length > 0 && (
-            <CommandGroup heading={`Tags (${results.tags.length})`}>
-              {results.tags.map((t) => (
+          {tags.length > 0 && (
+            <CommandGroup heading={`Tags (${tags.length})`}>
+              {tags.map((t) => (
                 <CommandItem key={`tag-${t.id}`} onSelect={() => handleSelect("tag", t.id)} className="flex items-center gap-2 py-2">
                   <div className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: t.color || "#3b82f6" }} />
-                  <span className="text-sm font-medium">{t.name}</span>
+                  <span className="text-sm font-medium">{t.name || `Tag #${t.id}`}</span>
                   {t.description && <span className="text-xs text-muted-foreground truncate ml-1">{t.description}</span>}
                 </CommandItem>
               ))}

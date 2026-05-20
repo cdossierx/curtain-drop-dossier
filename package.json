@@ -8,7 +8,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "start": "vite preview --host 0.0.0.0 --port 10000",
+    "start": "NODE_ENV=production tsx boot.ts",
     "check": "tsc -b",
     "format": "prettier --write .",
     "test": "vitest run",
@@ -79,6 +79,7 @@
     "sonner": "^2.0.7",
     "superjson": "^2.2.6",
     "tailwind-merge": "^3.4.0",
+    "tsx": "^4.21.0",
     "vaul": "^1.1.2",
     "zod": "^4.3.5"
   },

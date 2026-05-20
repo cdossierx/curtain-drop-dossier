@@ -9,9 +9,29 @@ import { exportRouter } from "./export-router";
 import { searchRouter } from "./search-router";
 import { intakeRouter } from "./intake-router";
 import { createRouter, publicQuery } from "./middleware";
+import { getDb } from "./connection";
+import { env } from "./env";
+import { sql } from "drizzle-orm";
 
 export const appRouter = createRouter({
-  ping: publicQuery.query(() => ({ ok: true, ts: Date.now() })),
+  ping: publicQuery.query(async () => {
+    if (!env.databaseUrl) {
+      return {
+        ok: false,
+        database: false,
+        error: "DATABASE_URL is not set. Copy .env.example to .env and add your MySQL connection string.",
+        ts: Date.now(),
+      };
+    }
+
+    try {
+      await getDb().execute(sql`select 1`);
+      return { ok: true, database: true, ts: Date.now() };
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Database connection failed.";
+      return { ok: false, database: false, error: message, ts: Date.now() };
+    }
+  }),
   auth: authRouter,
   incidents: incidentsRouter,
   persons: personsRouter,

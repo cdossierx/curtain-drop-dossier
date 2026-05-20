@@ -4,13 +4,12 @@ import type { HttpBindings } from "@hono/node-server";
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
 import { appRouter } from "./router";
 import { createContext } from "./context";
-import { env } from "./lib/env";
-import { Paths } from "@contracts/constants";
+import { env } from "./env";
 import fs from "fs";
 import path from "path";
 import crypto from "crypto";
-import { getDb } from "./queries/connection";
-import { intakeQueue } from "@db/schema";
+import { getDb } from "./connection";
+import { intakeQueue } from "./schema";
 
 // Lazy-load pdf-parse to avoid startup issues
 let pdfParse: any = null;

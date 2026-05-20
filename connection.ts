@@ -1,7 +1,7 @@
 import { drizzle } from "drizzle-orm/mysql2";
-import { env } from "../lib/env";
-import * as schema from "@db/schema";
-import * as relations from "@db/relations";
+import { env } from "./env";
+import * as schema from "./schema";
+import * as relations from "./relations";
 
 const fullSchema = { ...schema, ...relations };
 

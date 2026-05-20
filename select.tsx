@@ -4,6 +4,15 @@ import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
+/** Radix Select.Item rejects `value=""`; use for optional relation fields. */
+const SELECT_NONE_VALUE = "none" as const
+
+function optionalNumericIdFromSelect(value: string): number | undefined {
+  if (!value || value === SELECT_NONE_VALUE) return undefined
+  const n = Number(value)
+  return Number.isFinite(n) ? n : undefined
+}
+
 function Select({
   ...props
 }: React.ComponentProps<typeof SelectPrimitive.Root>) {
@@ -101,8 +110,11 @@ function SelectLabel({
 function SelectItem({
   className,
   children,
+  value,
   ...props
 }: React.ComponentProps<typeof SelectPrimitive.Item>) {
+  const safeValue = value === "" ? SELECT_NONE_VALUE : value
+
   return (
     <SelectPrimitive.Item
       data-slot="select-item"
@@ -110,6 +122,7 @@ function SelectItem({
         "focus:bg-accent focus:text-accent-foreground [&_svg:not([class*='text-'])]:text-muted-foreground relative flex w-full cursor-default items-center gap-2 rounded-sm py-1.5 pr-8 pl-2 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2",
         className
       )}
+      value={safeValue}
       {...props}
     >
       <span
@@ -185,4 +198,6 @@ export {
   SelectSeparator,
   SelectTrigger,
   SelectValue,
+  SELECT_NONE_VALUE,
+  optionalNumericIdFromSelect,
 }

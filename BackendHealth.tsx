@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { AlertTriangle, CheckCircle } from "lucide-react";
+import { AlertTriangle } from "lucide-react";
 import { trpc } from "./providers/trpc";
 
 /**
@@ -14,6 +14,7 @@ import { trpc } from "./providers/trpc";
 
 export function BackendHealth() {
   const [status, setStatus] = useState<"checking" | "online" | "offline">("checking");
+  const [message, setMessage] = useState("");
 
   // Use the existing ping query to verify connectivity
   const pingQuery = trpc.ping.useQuery(undefined, {
@@ -25,12 +26,23 @@ export function BackendHealth() {
   useEffect(() => {
     if (pingQuery.isLoading) {
       setStatus("checking");
-    } else if (pingQuery.isError || !pingQuery.data) {
+      setMessage("");
+    } else if (pingQuery.isError || !pingQuery.data?.ok) {
       setStatus("offline");
+      const errMsg = pingQuery.error?.message ?? "";
+      const isNetwork =
+        pingQuery.isError &&
+        (/failed to fetch|network|load failed/i.test(errMsg) || errMsg === "Failed to fetch");
+      setMessage(
+        isNetwork
+          ? "API server is not reachable. Run `npm run dev` (not `npm run preview`)."
+          : pingQuery.data?.error || errMsg || "Saves and uploads cannot reach the database.",
+      );
     } else {
       setStatus("online");
+      setMessage("");
     }
-  }, [pingQuery.isLoading, pingQuery.isError, pingQuery.data]);
+  }, [pingQuery.isLoading, pingQuery.isError, pingQuery.data, pingQuery.error]);
 
   // Online: show nothing (silent)
   if (status === "online") return null;
@@ -46,5 +58,10 @@ export function BackendHealth() {
   }
 
   // Offline: FULL BLOCKING BANNER — do not show empty lists
-  return null
+  return (
+    <div className="border-b border-destructive/30 bg-destructive/10 px-4 py-2 text-xs text-destructive flex items-center gap-2">
+      <AlertTriangle className="h-4 w-4 shrink-0" />
+      <span>Persistence is offline: {message}</span>
+    </div>
+  );
 }

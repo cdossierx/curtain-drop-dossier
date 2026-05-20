@@ -18,6 +18,7 @@ export default function Platforms() {
 
   const { data: platforms, isLoading } = trpc.platforms.list.useQuery();
   const utils = trpc.useUtils();
+  const platformList = platforms ?? [];
   const [showForm, setShowForm] = useState(false);
   const [editPlatform, setEditPlatform] = useState<{ id: number; name: string; urlPattern: string; notes: string } | null>(null);
   const [form, setForm] = useState({ name: "", urlPattern: "", notes: "" });
@@ -100,17 +101,17 @@ export default function Platforms() {
           </Card>
         )}
 
-        {isLoading ? <div className="text-sm text-muted-foreground">Loading...</div> : platforms?.length === 0 ? (
+        {isLoading ? <div className="text-sm text-muted-foreground">Loading...</div> : platformList.length === 0 ? (
           <Card><CardContent className="py-10 text-center"><p className="text-muted-foreground text-sm">No platforms yet</p></CardContent></Card>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {platforms?.map((p) => (
+            {platformList.map((p) => (
               <Card key={p.id} id={`platform-card-${p.id}`}>
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Globe className="h-4 w-4 text-muted-foreground" />
-                      <span className="font-medium">{p.name}</span>
+                      <span className="font-medium">{p.name || `Platform #${p.id}`}</span>
                     </div>
                     <div className="flex items-center gap-1">
                       <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => setEditPlatform({ id: p.id, name: p.name, urlPattern: p.urlPattern || "", notes: p.notes || "" })}>

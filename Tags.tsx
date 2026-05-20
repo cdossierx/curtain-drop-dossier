@@ -17,6 +17,7 @@ export default function TagsPage() {
 
   const { data: tags, isLoading } = trpc.tags.list.useQuery();
   const utils = trpc.useUtils();
+  const tagList = tags ?? [];
   const [showForm, setShowForm] = useState(false);
   const [editTag, setEditTag] = useState<{ id: number; name: string; color: string; description: string } | null>(null);
   const [form, setForm] = useState({ name: "", color: "#3b82f6", description: "" });
@@ -108,17 +109,17 @@ export default function TagsPage() {
           </Card>
         )}
 
-        {isLoading ? <div className="text-sm text-muted-foreground">Loading...</div> : tags?.length === 0 ? (
+        {isLoading ? <div className="text-sm text-muted-foreground">Loading...</div> : tagList.length === 0 ? (
           <Card><CardContent className="py-10 text-center"><p className="text-muted-foreground text-sm">No tags yet</p></CardContent></Card>
         ) : (
           <div className="flex flex-wrap gap-3">
-            {tags?.map((tag) => (
+            {tagList.map((tag) => (
               <Card key={tag.id} id={`tag-card-${tag.id}`} className="min-w-[200px]">
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <div className="w-4 h-4 rounded-full" style={{ backgroundColor: tag.color || "#3b82f6" }} />
-                      <span className="font-medium">{tag.name}</span>
+                      <span className="font-medium">{tag.name || `Tag #${tag.id}`}</span>
                     </div>
                     <div className="flex items-center gap-1">
                       <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => setEditTag({ id: tag.id, name: tag.name, color: tag.color || "#3b82f6", description: tag.description || "" })}>

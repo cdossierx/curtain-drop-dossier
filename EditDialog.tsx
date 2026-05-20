@@ -51,10 +51,19 @@ export function EditDialog({ open, onClose, title, fields, values, onSave, isPen
                   rows={3}
                 />
               ) : field.type === "select" ? (
-                <Select value={form[field.name] || ""} onValueChange={(v) => setForm({ ...form, [field.name]: v })}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
+                <Select
+                  value={form[field.name] || ""}
+                  onValueChange={(v) => setForm({ ...form, [field.name]: v })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select..." />
+                  </SelectTrigger>
                   <SelectContent>
-                    {field.options?.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
+                    {field.options?.map((o) => (
+                      <SelectItem key={o.value} value={o.value}>
+                        {o.label}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               ) : field.type === "color" ? (
