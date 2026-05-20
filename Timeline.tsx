@@ -57,6 +57,10 @@ export default function Timeline() {
   const { data: tags } = trpc.tags.list.useQuery();
   const { data: incidentTagsData } = trpc.tags.forUserIncidents.useQuery();
   const utils = trpc.useUtils();
+  const incidentList = incidents ?? [];
+  const personList = persons ?? [];
+  const tagList = tags ?? [];
+  const tagRows = incidentTagsData ?? [];
 
   // Auto-open selected incident from URL (e.g., from global search)
   useEffect(() => {
@@ -79,20 +83,20 @@ export default function Timeline() {
 
   // Build tag lookup: incidentId -> tag[]
   const tagsByIncident: Record<number, Array<{ tagId: number; tagName: string; tagColor: string }>> = {};
-  incidentTagsData?.forEach((t) => {
+  tagRows.forEach((t) => {
     if (!tagsByIncident[t.incidentId]) tagsByIncident[t.incidentId] = [];
     tagsByIncident[t.incidentId].push({ tagId: t.tagId, tagName: t.tagName, tagColor: t.tagColor || "#3b82f6" });
   });
 
-  const filtered = incidents?.filter((inc) => {
+  const filtered = incidentList.filter((inc) => {
     if (!searchQuery) return true;
     const q = searchQuery.toLowerCase();
     return (inc.title?.toLowerCase().includes(q) || false) ||
-      inc.description.toLowerCase().includes(q) ||
+      (inc.description?.toLowerCase().includes(q) || false) ||
       (inc.transcript?.toLowerCase().includes(q) || false) ||
       (inc.attackerName?.toLowerCase().includes(q) || false) ||
       (inc.context?.toLowerCase().includes(q) || false);
-  }) || [];
+  });
 
   const setFilter = (key: string, value: string) => {
     setFilters((prev) => ({ ...prev, [key]: value === "all" ? undefined : value }));
@@ -123,11 +127,11 @@ export default function Timeline() {
           </Select>
           <Select value={filters.personId || "all"} onValueChange={(v) => setFilter("personId", v)}>
             <SelectTrigger className="w-36"><SelectValue placeholder="Person" /></SelectTrigger>
-            <SelectContent>{[{ id: "all", displayName: "All" }, ...(persons || [])].map((p) => <SelectItem key={p.id} value={String(p.id)}>{p.displayName}</SelectItem>)}</SelectContent>
+            <SelectContent>{[{ id: "all", displayName: "All" }, ...personList].map((p) => <SelectItem key={p.id} value={String(p.id)}>{p.displayName || `Person #${p.id}`}</SelectItem>)}</SelectContent>
           </Select>
           <Select value={filters.tagId || "all"} onValueChange={(v) => setFilter("tagId", v)}>
             <SelectTrigger className="w-36"><SelectValue placeholder="Tag" /></SelectTrigger>
-            <SelectContent>{[{ id: "all", name: "All" }, ...(tags || [])].map((t) => <SelectItem key={t.id} value={String(t.id)}>{t.name}</SelectItem>)}</SelectContent>
+            <SelectContent>{[{ id: "all", name: "All" }, ...tagList].map((t) => <SelectItem key={t.id} value={String(t.id)}>{t.name || `Tag #${t.id}`}</SelectItem>)}</SelectContent>
           </Select>
         </div>
 
@@ -145,7 +149,7 @@ export default function Timeline() {
                   <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
                     <div className="flex-1 space-y-2">
                       <div className="flex flex-wrap items-center gap-2">
-                        <Badge className={STATUS_COLORS[inc.status] || "bg-gray-100"}>{inc.status.replace(/_/g, " ")}</Badge>
+                        <Badge className={STATUS_COLORS[inc.status] || "bg-gray-100"}>{(inc.status || "unreviewed").replace(/_/g, " ")}</Badge>
                         <Badge variant="outline">{EVENT_TYPE_LABELS[inc.eventType] || inc.eventType}</Badge>
                         {inc.lieTopic && <Badge variant="secondary">{inc.lieTopic}</Badge>}
                         <div className={`w-2 h-2 rounded-full ${CONFIDENCE_COLORS[inc.confidenceLevel] || "bg-gray-400"}`} title={inc.confidenceLevel} />
@@ -155,7 +159,7 @@ export default function Timeline() {
                         {new Date(inc.incidentDate).toLocaleDateString("en-US", { weekday: "short", year: "numeric", month: "short", day: "numeric" })}
                         {inc.incidentTime && ` at ${inc.incidentTime}`}
                       </p>
-                      <p className="text-sm text-foreground leading-relaxed">{inc.description}</p>
+                      <p className="text-sm text-foreground leading-relaxed">{inc.description || "No description provided."}</p>
 
                       {/* Tags display */}
                       {tagsByIncident[inc.id] && tagsByIncident[inc.id].length > 0 && (
@@ -242,8 +246,11 @@ function IncidentDetailDialog({
 
   if (!incident) return null;
 
+  const relatedIncidents = related ?? [];
+  const incidentEvidence = incident.evidence ?? [];
+
   // Filter out current incident and already-linked incidents from the link dropdown
-  const linkedIds = new Set(related?.map((r) => r.incident.id) || []);
+  const linkedIds = new Set(relatedIncidents.map((r) => r.incident.id));
   const availableIncidents = allIncidents?.filter(
     (i) => i.id !== incidentId && !linkedIds.has(i.id)
   ) || [];
@@ -254,7 +261,7 @@ function IncidentDetailDialog({
         <DialogHeader><DialogTitle>Incident #{incident.id}{incident.title && `: ${incident.title}`}</DialogTitle></DialogHeader>
         <div className="space-y-4 text-sm">
           <div className="flex flex-wrap gap-2">
-            <Badge className={STATUS_COLORS[incident.status] || ""}>{incident.status.replace(/_/g, " ")}</Badge>
+            <Badge className={STATUS_COLORS[incident.status] || ""}>{(incident.status || "unreviewed").replace(/_/g, " ")}</Badge>
             <Badge variant="outline">{EVENT_TYPE_LABELS[incident.eventType] || incident.eventType}</Badge>
             <Badge variant="secondary">{incident.confidenceLevel}</Badge>
           </div>
@@ -278,20 +285,20 @@ function IncidentDetailDialog({
             <div><span className="text-muted-foreground">Impact:</span> {incident.mentalHealthImpact}/10</div>
           </div>
 
-          <div><span className="text-muted-foreground">Description:</span><p className="mt-1">{incident.description}</p></div>
+          <div><span className="text-muted-foreground">Description:</span><p className="mt-1">{incident.description || "No description provided."}</p></div>
           {incident.transcript && <div><span className="text-muted-foreground">Transcript:</span><p className="mt-1 whitespace-pre-wrap">{incident.transcript}</p></div>}
           {incident.notes && <div><span className="text-muted-foreground">Notes:</span><p className="mt-1">{incident.notes}</p></div>}
           {incident.context && <div><span className="text-muted-foreground">Context:</span><p className="mt-1">{incident.context}</p></div>}
 
           {/* Linked Evidence */}
-          {incident.evidence && incident.evidence.length > 0 && (
+          {incidentEvidence.length > 0 && (
             <div className="border-t pt-4">
               <div className="flex items-center gap-2 mb-3">
                 <FileImage className="h-4 w-4 text-muted-foreground" />
-                <span className="font-medium">Evidence ({incident.evidence.length})</span>
+                <span className="font-medium">Evidence ({incidentEvidence.length})</span>
               </div>
               <div className="space-y-3">
-                {incident.evidence.map((ev) => (
+                {incidentEvidence.map((ev) => (
                   <Card key={ev.id}><CardContent className="p-3">
                     <div className="flex items-start gap-3">
                       <EvidencePreview
@@ -299,8 +306,8 @@ function IncidentDetailDialog({
                         size="sm"
                       />
                       <div className="min-w-0 flex-1">
-                        <p className="text-xs font-medium truncate">{ev.fileName}</p>
-                        <Badge variant="outline" className="text-[10px] mt-0.5">{ev.evidenceType.replace("_", " ")}</Badge>
+                        <p className="text-xs font-medium truncate">{ev.fileName || `Evidence #${ev.id}`}</p>
+                        <Badge variant="outline" className="text-[10px] mt-0.5">{(ev.evidenceType || "evidence").replace("_", " ")}</Badge>
                         {ev.storageType === "upload" && <Badge variant="secondary" className="text-[10px] mt-0.5 ml-1">Uploaded</Badge>}
                         {ev.description && <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{ev.description}</p>}
                       </div>
@@ -318,13 +325,13 @@ function IncidentDetailDialog({
               <span className="font-medium">Related Incidents</span>
             </div>
 
-            {related && related.length > 0 && (
+            {relatedIncidents.length > 0 ? (
               <div className="space-y-2 mb-4">
-                {related.map((r) => (
+                {relatedIncidents.map((r) => (
                   <Card key={r.linkId}><CardContent className="p-3 flex items-center justify-between">
                     <div>
                       <p className="text-xs font-medium">{r.incident.title || `Incident #${r.incident.id}`}</p>
-                      <p className="text-[10px] text-muted-foreground">{new Date(r.incident.incidentDate).toLocaleDateString()} — {r.relationshipType || "Related"}</p>
+                      <p className="text-[10px] text-muted-foreground">{new Date(r.incident.incidentDate).toLocaleDateString()} - {r.relationshipType || "Related"}</p>
                     </div>
                     <Button variant="ghost" size="sm" className="h-6 text-xs" onClick={() => removeRelated.mutate({ id: r.linkId })}>
                       <Unlink className="h-3 w-3 mr-1" />Unlink
@@ -332,6 +339,8 @@ function IncidentDetailDialog({
                   </CardContent></Card>
                 ))}
               </div>
+            ) : (
+              <p className="mb-4 text-xs text-muted-foreground">No related incidents linked yet.</p>
             )}
 
             {/* Link to another incident */}

@@ -5,7 +5,7 @@ import { Label } from "./label";
 import { Textarea } from "./textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "./card";
 import { Slider } from "./slider";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, SELECT_NONE_VALUE, optionalNumericIdFromSelect } from "./select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./dialog";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
@@ -71,9 +71,9 @@ export function EditIncident({ incidentId, open, onClose }: EditIncidentProps) {
     title: "",
     description: "",
     transcript: "",
-    personId: "",
-    aliasId: "",
-    platformId: "",
+    personId: SELECT_NONE_VALUE,
+    aliasId: SELECT_NONE_VALUE,
+    platformId: SELECT_NONE_VALUE,
     attackerName: "",
     platform: "",
     eventType: "harassment",
@@ -96,9 +96,9 @@ export function EditIncident({ incidentId, open, onClose }: EditIncidentProps) {
         title: incident.title || "",
         description: incident.description,
         transcript: incident.transcript || "",
-        personId: incident.personId ? String(incident.personId) : "",
-        aliasId: incident.aliasId ? String(incident.aliasId) : "",
-        platformId: incident.platformId ? String(incident.platformId) : "",
+        personId: incident.personId ? String(incident.personId) : SELECT_NONE_VALUE,
+        aliasId: incident.aliasId ? String(incident.aliasId) : SELECT_NONE_VALUE,
+        platformId: incident.platformId ? String(incident.platformId) : SELECT_NONE_VALUE,
         attackerName: incident.attackerName || "",
         platform: incident.platform || "",
         eventType: incident.eventType,
@@ -124,9 +124,9 @@ export function EditIncident({ incidentId, open, onClose }: EditIncidentProps) {
       title: form.title || undefined,
       description: form.description || undefined,
       transcript: form.transcript || undefined,
-      personId: form.personId ? Number(form.personId) : undefined,
-      aliasId: form.aliasId ? Number(form.aliasId) : undefined,
-      platformId: form.platformId ? Number(form.platformId) : undefined,
+      personId: optionalNumericIdFromSelect(form.personId),
+      aliasId: optionalNumericIdFromSelect(form.aliasId),
+      platformId: optionalNumericIdFromSelect(form.platformId),
       attackerName: form.attackerName || undefined,
       platform: form.platform || undefined,
       eventType: form.eventType as any,
@@ -216,21 +216,21 @@ export function EditIncident({ incidentId, open, onClose }: EditIncidentProps) {
                     <Label>Person</Label>
                     <Select value={form.personId} onValueChange={(v) => setForm({ ...form, personId: v })}>
                       <SelectTrigger><SelectValue placeholder="None" /></SelectTrigger>
-                      <SelectContent><SelectItem value="">None</SelectItem>{persons?.map((p) => <SelectItem key={p.id} value={String(p.id)}>{p.displayName}</SelectItem>)}</SelectContent>
+                      <SelectContent><SelectItem value={SELECT_NONE_VALUE}>None</SelectItem>{persons?.map((p) => <SelectItem key={p.id} value={String(p.id)}>{p.displayName}</SelectItem>)}</SelectContent>
                     </Select>
                   </div>
                   <div className="space-y-1.5">
                     <Label>Alias</Label>
                     <Select value={form.aliasId} onValueChange={(v) => setForm({ ...form, aliasId: v })}>
                       <SelectTrigger><SelectValue placeholder="None" /></SelectTrigger>
-                      <SelectContent><SelectItem value="">None</SelectItem>{aliases?.map((a) => <SelectItem key={a.id} value={String(a.id)}>{a.alias}</SelectItem>)}</SelectContent>
+                      <SelectContent><SelectItem value={SELECT_NONE_VALUE}>None</SelectItem>{aliases?.map((a) => <SelectItem key={a.id} value={String(a.id)}>{a.alias}</SelectItem>)}</SelectContent>
                     </Select>
                   </div>
                   <div className="space-y-1.5">
                     <Label>Platform</Label>
                     <Select value={form.platformId} onValueChange={(v) => setForm({ ...form, platformId: v })}>
                       <SelectTrigger><SelectValue placeholder="None" /></SelectTrigger>
-                      <SelectContent><SelectItem value="">None</SelectItem>{platforms?.map((p) => <SelectItem key={p.id} value={String(p.id)}>{p.name}</SelectItem>)}</SelectContent>
+                      <SelectContent><SelectItem value={SELECT_NONE_VALUE}>None</SelectItem>{platforms?.map((p) => <SelectItem key={p.id} value={String(p.id)}>{p.name}</SelectItem>)}</SelectContent>
                     </Select>
                   </div>
                   <div className="space-y-1.5"><Label>Attacker Name (legacy)</Label><Input value={form.attackerName} onChange={(e) => setForm({ ...form, attackerName: e.target.value })} /></div>

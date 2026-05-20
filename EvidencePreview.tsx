@@ -4,11 +4,11 @@ import { FileImage, FileText, FileAudio, Film, ScrollText, MessageSquare, Scale,
 
 interface EvidenceItem {
   id: number;
-  fileName: string;
+  fileName?: string | null;
   fileUrl?: string | null;
   filePath?: string | null;
-  storageType: string;
-  evidenceType: string;
+  storageType?: string | null;
+  evidenceType?: string | null;
   description?: string | null;
 }
 
@@ -32,12 +32,13 @@ function getSrc(item: EvidenceItem): string | null {
 function isImage(item: EvidenceItem): boolean {
   const src = getSrc(item);
   if (!src) return false;
+  const lowerSrc = src.toLowerCase();
   return item.evidenceType === "screenshot" ||
-    src.endsWith(".png") || src.endsWith(".jpg") || src.endsWith(".jpeg") || src.endsWith(".webp");
+    lowerSrc.endsWith(".png") || lowerSrc.endsWith(".jpg") || lowerSrc.endsWith(".jpeg") || lowerSrc.endsWith(".webp");
 }
 
 function isPdf(item: EvidenceItem): boolean {
-  return item.fileName.toLowerCase().endsWith(".pdf") || (item.fileUrl?.toLowerCase().endsWith(".pdf") ?? false);
+  return (item.fileName?.toLowerCase().endsWith(".pdf") ?? false) || (item.fileUrl?.toLowerCase().endsWith(".pdf") ?? false);
 }
 
 interface EvidencePreviewProps {
@@ -48,6 +49,7 @@ interface EvidencePreviewProps {
 export function EvidencePreview({ item, size = "md" }: EvidencePreviewProps) {
   const [viewerOpen, setViewerOpen] = useState(false);
   const src = getSrc(item);
+  const fileName = item.fileName || `Evidence #${item.id}`;
 
   const sizeClasses = {
     sm: "w-10 h-10",
@@ -72,7 +74,7 @@ export function EvidencePreview({ item, size = "md" }: EvidencePreviewProps) {
         >
           <img
             src={src}
-            alt={item.fileName}
+            alt={fileName}
             className="w-full h-full object-cover"
             loading="lazy"
           />
@@ -120,24 +122,26 @@ export function EvidencePreview({ item, size = "md" }: EvidencePreviewProps) {
 // Full-size viewer modal
 export function EvidenceViewer({ item, open, onClose }: { item: EvidenceItem; open: boolean; onClose: () => void }) {
   const src = getSrc(item);
+  const fileName = item.fileName || `Evidence #${item.id}`;
+  const evidenceType = item.evidenceType || "evidence";
 
   return (
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
       <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto p-0">
         <div className="p-4 border-b">
-          <p className="font-semibold text-sm">{item.fileName}</p>
-          <p className="text-xs text-muted-foreground">{item.evidenceType.replace("_", " ")}</p>
+          <p className="font-semibold text-sm">{fileName}</p>
+          <p className="text-xs text-muted-foreground">{evidenceType.replace("_", " ")}</p>
         </div>
 
         <div className="p-4 flex items-center justify-center bg-black/5 dark:bg-white/5 min-h-[200px]">
           {isImage(item) && src ? (
-            <img src={src} alt={item.fileName} className="max-w-full max-h-[60vh] object-contain rounded-md" />
+            <img src={src} alt={fileName} className="max-w-full max-h-[60vh] object-contain rounded-md" />
           ) : isPdf(item) && src ? (
             <div className="w-full space-y-3">
               <div className="flex items-center justify-center gap-3 py-8">
                 <FileText className="h-12 w-12 text-red-500" />
                 <div>
-                  <p className="font-medium">{item.fileName}</p>
+                  <p className="font-medium">{fileName}</p>
                   <p className="text-xs text-muted-foreground">PDF Document</p>
                 </div>
               </div>

@@ -29,7 +29,15 @@ export function BackendHealth() {
       setMessage("");
     } else if (pingQuery.isError || !pingQuery.data?.ok) {
       setStatus("offline");
-      setMessage(pingQuery.error?.message || pingQuery.data?.error || "Saves and uploads cannot reach the database.");
+      const errMsg = pingQuery.error?.message ?? "";
+      const isNetwork =
+        pingQuery.isError &&
+        (/failed to fetch|network|load failed/i.test(errMsg) || errMsg === "Failed to fetch");
+      setMessage(
+        isNetwork
+          ? "API server is not reachable. Run `npm run dev` (not `npm run preview`)."
+          : pingQuery.data?.error || errMsg || "Saves and uploads cannot reach the database.",
+      );
     } else {
       setStatus("online");
       setMessage("");

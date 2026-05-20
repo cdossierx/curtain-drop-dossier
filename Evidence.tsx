@@ -7,7 +7,7 @@ import { Textarea } from "./textarea";
 import { Card, CardContent } from "./card";
 import { Badge } from "./badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./tabs";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, SELECT_NONE_VALUE, optionalNumericIdFromSelect } from "./select";
 import { useState, useRef, useEffect } from "react";
 import { useSearchParams } from "react-router";
 import { toast } from "sonner";
@@ -35,6 +35,8 @@ export default function Evidence() {
   const { data: files, isLoading } = trpc.evidence.list.useQuery({});
   const { data: persons } = trpc.persons.list.useQuery();
   const utils = trpc.useUtils();
+  const evidenceFiles = files ?? [];
+  const personList = persons ?? [];
   const [searchParams, setSearchParams] = useSearchParams();
   const selectedId = searchParams.get("selected");
 
@@ -147,7 +149,7 @@ export default function Evidence() {
       filePath: tab === "upload" ? uploadedFile?.filePath : undefined,
       storageType: tab === "upload" ? "upload" : "url",
       evidenceType: form.evidenceType as any,
-      personId: form.personId ? Number(form.personId) : undefined,
+      personId: optionalNumericIdFromSelect(form.personId),
       capturedBy: form.capturedBy || undefined,
       captureDate: form.captureDate || undefined,
       originalPlatform: form.originalPlatform || undefined,
@@ -240,7 +242,10 @@ export default function Evidence() {
                   <div className="space-y-1.5"><Label>Person</Label>
                     <Select value={form.personId} onValueChange={(v) => setForm({ ...form, personId: v })}>
                       <SelectTrigger><SelectValue placeholder="Select..." /></SelectTrigger>
-                      <SelectContent>{persons?.map((p) => <SelectItem key={p.id} value={String(p.id)}>{p.displayName}</SelectItem>)}</SelectContent>
+                      <SelectContent>
+                        <SelectItem value={SELECT_NONE_VALUE}>None</SelectItem>
+                        {personList.map((p) => <SelectItem key={p.id} value={String(p.id)}>{p.displayName || `Person #${p.id}`}</SelectItem>)}
+                      </SelectContent>
                     </Select>
                   </div>
                   <div className="space-y-1.5"><Label>Captured By</Label><Input value={form.capturedBy} onChange={(e) => setForm({ ...form, capturedBy: e.target.value })} /></div>
@@ -275,11 +280,11 @@ export default function Evidence() {
         )}
 
         {/* Evidence list */}
-        {isLoading ? <div className="text-sm text-muted-foreground">Loading...</div> : files?.length === 0 ? (
+        {isLoading ? <div className="text-sm text-muted-foreground">Loading...</div> : evidenceFiles.length === 0 ? (
           <Card><CardContent className="py-10 text-center"><p className="text-muted-foreground text-sm">No evidence yet</p></CardContent></Card>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {files?.map((f) => (
+            {evidenceFiles.map((f) => (
               <Card key={f.id} id={`evidence-card-${f.id}`}>
                 <CardContent className="p-4">
                   <div className="flex items-start justify-between">
@@ -290,9 +295,9 @@ export default function Evidence() {
                       />
                       <div className="min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="font-semibold text-sm truncate">{f.fileName}</span>
+                          <span className="font-semibold text-sm truncate">{f.fileName || `Evidence #${f.id}`}</span>
                           {f.storageType === "upload" && <Badge variant="secondary" className="text-[10px]">Uploaded</Badge>}
-                          <Badge variant="outline" className="text-xs">{f.evidenceType.replace("_", " ")}</Badge>
+                          <Badge variant="outline" className="text-xs">{(f.evidenceType || "evidence").replace("_", " ")}</Badge>
                           <Badge className={`text-xs ${CONFIDENCE_COLORS[f.confidence]}`}>{f.confidence}</Badge>
                         </div>
                         {f.description && <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{f.description}</p>}

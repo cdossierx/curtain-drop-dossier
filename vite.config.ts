@@ -19,12 +19,12 @@ export default defineConfig({
 
   server: {
     host: "0.0.0.0",
-    allowedHosts: ["curtain-drop-dossier-web.onrender.com"]
+    allowedHosts: ["localhost", "127.0.0.1", "curtain-drop-dossier-web.onrender.com"]
   },
 
   preview: {
     host: "0.0.0.0",
-    allowedHosts: ["curtain-drop-dossier-web.onrender.com"]
+    allowedHosts: ["localhost", "127.0.0.1", "curtain-drop-dossier-web.onrender.com"]
   },
 
   resolve: {

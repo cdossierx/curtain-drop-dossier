@@ -6,11 +6,11 @@ import { toast } from "sonner";
 import { Download, RotateCcw, Shield, Database, AlertTriangle, CheckCircle, FileJson, Archive, FileImage, Tag } from "lucide-react";
 
 export default function Settings() {
-  // const { data: exportData } = trpc.export.full.useQuery();
-  const exportData = null;
+  const { data: exportData, isLoading: exportLoading } = trpc.export.full.useQuery();
+  const utils = trpc.useUtils();
 
   const restoreIncident = trpc.incidents.restore.useMutation({
-    onSuccess: () => { toast.success("Incident restored"); /* utils.export.full.invalidate(); utils.incidents.stats.invalidate(); utils.incidents.list.invalidate(); */ },
+    onSuccess: () => { toast.success("Incident restored"); utils.incidents.stats.invalidate(); utils.incidents.list.invalidate(); },
   });
   const restorePerson = trpc.persons.restore.useMutation({
     onSuccess: () => { toast.success("Person restored"); utils.export.full.invalidate(); utils.persons.list.invalidate(); },
@@ -87,7 +87,7 @@ export default function Settings() {
             )}
             <Button onClick={handleExport} disabled={!exportData} className="w-full sm:w-auto">
               <FileJson className="h-4 w-4 mr-2" />
-              {exportData ? "Download Full Backup (.json)" : "Loading..."}
+              {exportData ? "Download Full Backup (.json)" : exportLoading ? "Loading..." : "Backup unavailable"}
             </Button>
           </CardContent>
         </Card>

@@ -44,9 +44,11 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen bg-background flex">
       <BackendHealth />
       {/* Desktop Sidebar */}
-      <aside className="hidden lg:flex flex-col w-56 border-r bg-card fixed h-full z-10 overflow-y-auto">
-        <div className="p-5 flex items-center gap-3">
-          <Shield className="h-6 w-6 text-primary" />
+      <aside className="hidden lg:flex flex-col w-56 border-r bg-card/90 backdrop-blur fixed h-full z-10 overflow-y-auto">
+        <div className="p-5 flex items-center gap-3 border-b border-border/60">
+          <div className="rounded-xl bg-primary/10 p-2">
+            <Shield className="h-5 w-5 text-primary" />
+          </div>
           <div>
             <h1 className="font-bold text-sm leading-tight">Curtain Drop Dossier</h1>
             <p className="text-[10px] text-muted-foreground">Operation Curtain Drop</p>
@@ -60,10 +62,10 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`flex items-center gap-2.5 px-3 py-2 rounded-md text-xs font-medium transition-colors ${
+                className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium transition-all ${
                   isActive
-                    ? "bg-primary/10 text-primary"
-                    : "text-muted-foreground hover:bg-accent hover:text-foreground"
+                    ? "bg-primary/15 text-primary shadow-sm"
+                    : "text-muted-foreground hover:bg-accent/80 hover:text-foreground"
                 }`}
               >
                 <item.icon className="h-4 w-4" />
@@ -73,7 +75,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
           })}
         </nav>
 
-        <div className="p-3 border-t">
+        <div className="p-3 border-t border-border/60">
           {user && (
             <div className="px-3 py-1.5 mb-2">
               <p className="text-xs font-medium truncate">{user.name || "User"}</p>
@@ -85,7 +87,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
       </aside>
 
       {/* Mobile Header */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 h-14 border-b bg-card z-50 flex items-center gap-2 px-3">
+      <div className="lg:hidden fixed top-0 left-0 right-0 h-14 border-b bg-card/95 backdrop-blur z-50 flex items-center gap-2 px-3">
         <div className="flex items-center gap-2 shrink-0">
           <Shield className="h-5 w-5 text-primary" />
         </div>
@@ -102,7 +104,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="lg:hidden fixed inset-0 top-14 bg-background z-40 p-3 overflow-y-auto">
+        <div className="lg:hidden fixed inset-0 top-14 bg-background/98 backdrop-blur z-40 p-3 overflow-y-auto">
           <nav className="space-y-0.5">
             {navItems.map((item) => {
               const isActive = location.pathname === item.path;
@@ -111,7 +113,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
                   key={item.path}
                   to={item.path}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center gap-3 px-4 py-2.5 rounded-md text-sm font-medium transition-colors ${
+                  className={`flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                     isActive ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-accent"
                   }`}
                 >
@@ -129,7 +131,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
       )}
 
       {/* Desktop top bar with search */}
-      <div className="hidden lg:flex fixed top-0 left-56 right-0 h-14 border-b bg-card z-30 items-center gap-4 px-4">
+      <div className="hidden lg:flex fixed top-0 left-56 right-0 h-14 border-b bg-card/80 backdrop-blur z-30 items-center gap-4 px-4">
         <div className="flex-1 max-w-md">
           <GlobalSearch />
         </div>
@@ -140,7 +142,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 
       {/* Main Content */}
       <main className="flex-1 lg:ml-56 pt-14">
-        <div className="p-4 lg:p-6 max-w-7xl mx-auto">{children}</div>
+        <div className="p-4 lg:p-7 max-w-7xl mx-auto">{children}</div>
       </main>
     </div>
   );

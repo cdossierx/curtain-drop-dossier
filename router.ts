@@ -16,11 +16,21 @@ import { sql } from "drizzle-orm";
 export const appRouter = createRouter({
   ping: publicQuery.query(async () => {
     if (!env.databaseUrl) {
-      return { ok: false, database: false, error: "DATABASE_URL is not configured.", ts: Date.now() };
+      return {
+        ok: false,
+        database: false,
+        error: "DATABASE_URL is not set. Copy .env.example to .env and add your MySQL connection string.",
+        ts: Date.now(),
+      };
     }
 
-    await getDb().execute(sql`select 1`);
-    return { ok: true, database: true, ts: Date.now() };
+    try {
+      await getDb().execute(sql`select 1`);
+      return { ok: true, database: true, ts: Date.now() };
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Database connection failed.";
+      return { ok: false, database: false, error: message, ts: Date.now() };
+    }
   }),
   auth: authRouter,
   incidents: incidentsRouter,

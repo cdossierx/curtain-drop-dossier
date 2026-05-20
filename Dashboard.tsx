@@ -45,25 +45,30 @@ export default function Dashboard() {
   const { data: evidenceStats } = trpc.evidence.stats.useQuery();
   const { data: platformStats } = trpc.platforms.stats.useQuery();
 
+  const byEventType = stats?.byEventType ?? [];
+  const byStatus = stats?.byStatus ?? [];
+  const byPerson = stats?.byPerson ?? [];
+  const timeline = stats?.timeline ?? [];
+
   // Map personId to display name
   const personNameMap: Record<number, string> = {};
   personsList?.forEach((p) => { personNameMap[p.id] = p.displayName; });
 
-  const eventTypeData = stats?.byEventType.map((item) => ({
+  const eventTypeData = byEventType.map((item) => ({
     name: EVENT_TYPE_LABELS[item.eventType] || item.eventType,
     value: item.count,
-  })) || [];
+  }));
 
-  const statusData = stats?.byStatus.map((item) => ({
+  const statusData = byStatus.map((item) => ({
     name: STATUS_LABELS[item.status] || item.status,
     value: item.count,
-  })) || [];
+  }));
 
-  const timelineData = stats?.timeline.map((item) => ({
+  const timelineData = timeline.map((item) => ({
     month: item.month,
     incidents: item.count,
-    mentalHealth: Math.round(item.avgMentalHealth * 10) / 10,
-  })) || [];
+    mentalHealth: Math.round((item.avgMentalHealth || 0) * 10) / 10,
+  }));
 
   return (
     <AppLayout>
@@ -95,12 +100,12 @@ export default function Dashboard() {
         <Card>
           <CardHeader><CardTitle className="flex items-center gap-2 text-base"><Activity className="h-4 w-4" />Most Active Persons</CardTitle></CardHeader>
           <CardContent>
-            {statsLoading ? <Skeleton className="h-32" /> : stats?.byPerson.length === 0 ? (
+            {statsLoading ? <Skeleton className="h-32" /> : byPerson.length === 0 ? (
               <p className="text-muted-foreground text-center py-6 text-sm">No data yet. Start logging incidents.</p>
             ) : (
               <div className="space-y-3">
-                {stats?.byPerson.slice(0, 5).map((p) => {
-                  const max = stats.byPerson[0]?.count || 1;
+                {byPerson.slice(0, 5).map((p) => {
+                  const max = byPerson[0]?.count || 1;
                   const name = p.personId ? (personNameMap[p.personId] || `Person #${p.personId}`) : "Unknown";
                   return (
                     <div key={p.personId || 0} className="space-y-1">

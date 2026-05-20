@@ -6,7 +6,7 @@ import { Label } from "./label";
 import { Textarea } from "./textarea";
 import { Card, CardContent } from "./card";
 import { Badge } from "./badge";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, SELECT_NONE_VALUE, optionalNumericIdFromSelect } from "./select";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router";
 import { toast } from "sonner";
@@ -30,6 +30,9 @@ export default function Aliases() {
   const { data: persons } = trpc.persons.list.useQuery();
   const { data: platforms } = trpc.platforms.list.useQuery();
   const utils = trpc.useUtils();
+  const aliasList = aliases ?? [];
+  const personList = persons ?? [];
+  const platformList = platforms ?? [];
   const [showForm, setShowForm] = useState(false);
   const [editAlias, setEditAlias] = useState<{ id: number; alias: string; suspectedOperator: string; confidence: string; evidenceDescription: string; notes: string } | null>(null);
   const [form, setForm] = useState({ personId: "", alias: "", platformId: "", suspectedOperator: "", confidence: "unverified" as string, evidenceDescription: "", notes: "" });
@@ -74,8 +77,8 @@ export default function Aliases() {
     if (!form.alias.trim()) { toast.error("Alias is required"); return; }
     createMutation.mutate({
       alias: form.alias.trim(),
-      personId: form.personId ? Number(form.personId) : undefined,
-      platformId: form.platformId ? Number(form.platformId) : undefined,
+      personId: optionalNumericIdFromSelect(form.personId),
+      platformId: optionalNumericIdFromSelect(form.platformId),
       suspectedOperator: form.suspectedOperator || undefined,
       confidence: form.confidence as "confirmed" | "strong_evidence" | "moderate_evidence" | "unverified" | "disputed",
       evidenceDescription: form.evidenceDescription || undefined,
@@ -103,13 +106,13 @@ export default function Aliases() {
                   <div className="space-y-1.5"><Label>Person</Label>
                     <Select value={form.personId} onValueChange={(v) => setForm({ ...form, personId: v })}>
                       <SelectTrigger><SelectValue placeholder="Select person..." /></SelectTrigger>
-                      <SelectContent>{persons?.map((p) => <SelectItem key={p.id} value={String(p.id)}>{p.displayName}</SelectItem>)}</SelectContent>
+                      <SelectContent><SelectItem value={SELECT_NONE_VALUE}>None</SelectItem>{personList.map((p) => <SelectItem key={p.id} value={String(p.id)}>{p.displayName || `Person #${p.id}`}</SelectItem>)}</SelectContent>
                     </Select>
                   </div>
                   <div className="space-y-1.5"><Label>Platform</Label>
                     <Select value={form.platformId} onValueChange={(v) => setForm({ ...form, platformId: v })}>
                       <SelectTrigger><SelectValue placeholder="Select..." /></SelectTrigger>
-                      <SelectContent>{platforms?.map((p) => <SelectItem key={p.id} value={String(p.id)}>{p.name}</SelectItem>)}</SelectContent>
+                      <SelectContent><SelectItem value={SELECT_NONE_VALUE}>None</SelectItem>{platformList.map((p) => <SelectItem key={p.id} value={String(p.id)}>{p.name || `Platform #${p.id}`}</SelectItem>)}</SelectContent>
                     </Select>
                   </div>
                   <div className="space-y-1.5"><Label>Confidence</Label>
@@ -134,11 +137,11 @@ export default function Aliases() {
           </Card>
         )}
 
-        {isLoading ? <div className="text-sm text-muted-foreground">Loading...</div> : aliases?.length === 0 ? (
+        {isLoading ? <div className="text-sm text-muted-foreground">Loading...</div> : aliasList.length === 0 ? (
           <Card><CardContent className="py-10 text-center"><p className="text-muted-foreground text-sm">No aliases yet</p></CardContent></Card>
         ) : (
           <div className="space-y-2">
-            {aliases?.map((a) => (
+            {aliasList.map((a) => (
               <Card key={a.id} id={`alias-card-${a.id}`}>
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
@@ -146,8 +149,8 @@ export default function Aliases() {
                       <AtSign className="h-5 w-5 text-muted-foreground" />
                       <div>
                         <div className="flex items-center gap-2">
-                          <span className="font-semibold">{a.alias}</span>
-                          <Badge className={`text-xs ${CONFIDENCE_COLORS[a.confidence]}`}>{CONFIDENCE_LABELS[a.confidence]}</Badge>
+                          <span className="font-semibold">{a.alias || `Alias #${a.id}`}</span>
+                          <Badge className={`text-xs ${CONFIDENCE_COLORS[a.confidence] || CONFIDENCE_COLORS.unverified}`}>{CONFIDENCE_LABELS[a.confidence] || a.confidence || "Unverified"}</Badge>
                         </div>
                         {a.suspectedOperator && <p className="text-xs text-muted-foreground">Suspected: {a.suspectedOperator}</p>}
                         {a.evidenceDescription && <p className="text-xs text-muted-foreground mt-0.5">{a.evidenceDescription}</p>}

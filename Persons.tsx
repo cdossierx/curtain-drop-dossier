@@ -29,6 +29,7 @@ export default function Persons() {
 
   const { data: persons, isLoading } = trpc.persons.list.useQuery();
   const utils = trpc.useUtils();
+  const personList = persons ?? [];
   const [showForm, setShowForm] = useState(false);
   const [selectedPerson, setSelectedPerson] = useState<number | null>(selectedId ? Number(selectedId) : null);
   const [editPerson, setEditPerson] = useState<{ id: number; displayName: string; firstSeenDate: string; notes: string } | null>(null);
@@ -115,18 +116,18 @@ export default function Persons() {
           </Card>
         )}
 
-        {isLoading ? <div className="space-y-3">{Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-24" />)}</div> : persons?.length === 0 ? (
+        {isLoading ? <div className="space-y-3">{Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-24" />)}</div> : personList.length === 0 ? (
           <Card><CardContent className="py-10 text-center"><p className="text-muted-foreground text-sm">No persons yet. Add your first.</p></CardContent></Card>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {persons?.map((person) => (
+            {personList.map((person) => (
               <Card key={person.id} id={`person-card-${person.id}`} className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => setSelectedPerson(person.id)}>
                 <CardContent className="p-4">
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
                       <UserCircle className="h-8 w-8 text-primary" />
                       <div>
-                        <p className="font-semibold">{person.displayName}</p>
+                        <p className="font-semibold">{person.displayName || `Person #${person.id}`}</p>
                         {person.firstSeenDate && <p className="text-xs text-muted-foreground">First seen: {new Date(person.firstSeenDate).toLocaleDateString()}</p>}
                       </div>
                     </div>
@@ -162,52 +163,62 @@ export default function Persons() {
         {selectedPerson && personDetail && (
           <Dialog open={!!selectedPerson} onOpenChange={() => { setSelectedPerson(null); if (searchParams.has("selected")) { const newParams = new URLSearchParams(searchParams); newParams.delete("selected"); setSearchParams(newParams, { replace: true }); } }}>
             <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
-              <DialogHeader><DialogTitle>{personDetail.displayName}</DialogTitle></DialogHeader>
+              <DialogHeader><DialogTitle>{personDetail.displayName || `Person #${personDetail.id}`}</DialogTitle></DialogHeader>
               <div className="space-y-4 text-sm">
+                {(() => {
+                  const aliases = personDetail.aliases ?? [];
+                  const platformsUsed = personDetail.platformsUsed ?? [];
+                  const commonTactics = personDetail.commonTactics ?? [];
+                  const incidents = personDetail.incidents ?? [];
+                  return (
+                    <>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                   <Card><CardContent className="pt-4"><div className="text-xl font-bold">{personDetail.totalIncidents}</div><p className="text-xs text-muted-foreground">Incidents</p></CardContent></Card>
                   <Card><CardContent className="pt-4"><div className="text-xl font-bold">{personDetail.evidenceCount}</div><p className="text-xs text-muted-foreground">Evidence</p></CardContent></Card>
-                  <Card><CardContent className="pt-4"><div className="text-xl font-bold">{personDetail.aliases.length}</div><p className="text-xs text-muted-foreground">Aliases</p></CardContent></Card>
-                  <Card><CardContent className="pt-4"><div className="text-xl font-bold">{personDetail.platformsUsed.length}</div><p className="text-xs text-muted-foreground">Platforms</p></CardContent></Card>
+                  <Card><CardContent className="pt-4"><div className="text-xl font-bold">{aliases.length}</div><p className="text-xs text-muted-foreground">Aliases</p></CardContent></Card>
+                  <Card><CardContent className="pt-4"><div className="text-xl font-bold">{platformsUsed.length}</div><p className="text-xs text-muted-foreground">Platforms</p></CardContent></Card>
                 </div>
                 {personDetail.firstSeenDate && <p><span className="text-muted-foreground">First seen:</span> {new Date(personDetail.firstSeenDate).toLocaleDateString()}</p>}
-                {personDetail.platformsUsed.length > 0 && <p><span className="text-muted-foreground">Platforms:</span> {personDetail.platformsUsed.join(", ")}</p>}
-                {personDetail.commonTactics.length > 0 && (
+                {platformsUsed.length > 0 && <p><span className="text-muted-foreground">Platforms:</span> {platformsUsed.join(", ")}</p>}
+                {commonTactics.length > 0 && (
                   <div>
                     <p className="text-muted-foreground mb-2">Common Tactics:</p>
                     <div className="space-y-1.5">
-                      {personDetail.commonTactics.map((t) => (
+                      {commonTactics.map((t) => (
                         <div key={t.tactic}>
                           <div className="flex justify-between text-xs mb-0.5"><span>{EVENT_TYPE_LABELS[t.tactic] || t.tactic}</span><span>{t.count}</span></div>
-                          <Progress value={(t.count / (personDetail.commonTactics[0]?.count || 1)) * 100} />
+                          <Progress value={(t.count / (commonTactics[0]?.count || 1)) * 100} />
                         </div>
                       ))}
                     </div>
                   </div>
                 )}
-                {personDetail.aliases.length > 0 && (
+                {aliases.length > 0 && (
                   <div>
                     <p className="text-muted-foreground mb-2">Known Aliases:</p>
                     <div className="flex flex-wrap gap-2">
-                      {personDetail.aliases.map((a) => <Badge key={a.id} variant="outline">{a.alias}</Badge>)}
+                      {aliases.map((a) => <Badge key={a.id} variant="outline">{a.alias || `Alias #${a.id}`}</Badge>)}
                     </div>
                   </div>
                 )}
                 {personDetail.notes && <div><p className="text-muted-foreground">Notes:</p><p>{personDetail.notes}</p></div>}
-                {personDetail.incidents.length > 0 && (
+                {incidents.length > 0 && (
                   <div>
                     <p className="text-muted-foreground mb-2">Recent Incidents:</p>
                     <div className="space-y-2">
-                      {personDetail.incidents.slice(0, 5).map((inc) => (
+                      {incidents.slice(0, 5).map((inc) => (
                         <Card key={inc.id}><CardContent className="p-3">
                           <div className="flex justify-between"><Badge variant="outline" className="text-xs">{EVENT_TYPE_LABELS[inc.eventType]}</Badge><span className="text-xs text-muted-foreground">{new Date(inc.incidentDate).toLocaleDateString()}</span></div>
                           {inc.title && <p className="font-medium mt-1">{inc.title}</p>}
-                          <p className="text-xs mt-1 line-clamp-2">{inc.description}</p>
+                          <p className="text-xs mt-1 line-clamp-2">{inc.description || "No description provided."}</p>
                         </CardContent></Card>
                       ))}
                     </div>
                   </div>
                 )}
+                    </>
+                  );
+                })()}
               </div>
             </DialogContent>
           </Dialog>
