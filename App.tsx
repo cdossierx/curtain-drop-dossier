@@ -9,6 +9,7 @@ import Evidence from './Evidence'
 import TagsPage from './Tags'
 import Platforms from './Platforms'
 import Analytics from './Analytics'
+import IntelDashboard from './IntelDashboard'
 import Settings from './Settings'
 import NotFound from "./NotFound"
 import { Component, type ErrorInfo, type ReactNode } from "react"
@@ -62,6 +63,7 @@ export default function App() {
         <Route path="/tags" element={<TagsPage />} />
         <Route path="/platforms" element={<Platforms />} />
         <Route path="/analytics" element={<Analytics />} />
+        <Route path="/intel" element={<IntelDashboard />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

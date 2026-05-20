@@ -9,6 +9,7 @@ import {
   PlusCircle,
   Clock,
   BarChart3,
+  Sparkles,
   Menu,
   X,
   UserCircle,
@@ -32,6 +33,7 @@ const navItems = [
   { path: "/tags", label: "Tags", icon: Tag },
   { path: "/platforms", label: "Platforms", icon: Globe },
   { path: "/analytics", label: "Analytics", icon: BarChart3 },
+  { path: "/intel", label: "Narrative Intel", icon: Sparkles },
   { path: "/settings", label: "Safety", icon: Shield },
 ];
 
