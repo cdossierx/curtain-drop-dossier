@@ -20,7 +20,7 @@ const EVENT_TYPES = [
   { value: "narrative_seeding", label: "Narrative Seeding" },
   { value: "dogpiling", label: "Dogpiling" },
   { value: "coordinated_live", label: "Coordinated Live" },
-  { value: "evidence_leak", label: "Evidence Leak" },
+  { value: "evidence_leak", label: "Receipt Leak" },
   { value: "false_allegation", label: "False Allegation" },
   { value: "account_creation", label: "Account Creation" },
   { value: "account_deletion", label: "Account Deletion" },
@@ -36,8 +36,8 @@ const STATUS_OPTIONS = [
 
 const CONFIDENCE_OPTIONS = [
   { value: "confirmed", label: "Confirmed" },
-  { value: "strong_evidence", label: "Strong Evidence" },
-  { value: "moderate_evidence", label: "Moderate Evidence" },
+  { value: "strong_evidence", label: "Strong" },
+  { value: "moderate_evidence", label: "Moderate" },
   { value: "unverified", label: "Unverified" },
   { value: "disputed", label: "Disputed" },
 ];

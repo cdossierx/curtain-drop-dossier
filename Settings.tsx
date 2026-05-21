@@ -19,7 +19,7 @@ export default function Settings() {
     onSuccess: () => { toast.success("Alias restored"); utils.export.full.invalidate(); utils.aliases.list.invalidate(); },
   });
   const restoreEvidence = trpc.evidence.restore.useMutation({
-    onSuccess: () => { toast.success("Evidence restored"); utils.export.full.invalidate(); utils.evidence.list.invalidate(); utils.evidence.stats.invalidate(); },
+    onSuccess: () => { toast.success("Receipt restored"); utils.export.full.invalidate(); utils.evidence.list.invalidate(); utils.evidence.stats.invalidate(); },
   });
   const restoreTag = trpc.tags.restore.useMutation({
     onSuccess: () => { toast.success("Tag restored"); utils.export.full.invalidate(); utils.tags.list.invalidate(); },
@@ -31,7 +31,7 @@ export default function Settings() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `evidence-backup-${new Date().toISOString().split("T")[0]}.json`;
+    a.download = `receipts-backup-${new Date().toISOString().split("T")[0]}.json`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -59,7 +59,7 @@ export default function Settings() {
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-sm text-muted-foreground">
-              Download a complete JSON backup of every incident, person, alias, evidence file, tag, and platform in your account. This is your disaster recovery file.
+              Download a complete JSON backup of every incident, person, alias, receipt file, tag, and platform in your account. This is your disaster recovery file.
             </p>
             {exportData && (
               <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 text-sm">
@@ -77,7 +77,7 @@ export default function Settings() {
                 </div>
                 <div className="text-center p-3 bg-secondary rounded-lg">
                   <div className="font-bold text-lg">{exportData.summary.evidence}</div>
-                  <div className="text-xs text-muted-foreground">Evidence</div>
+                  <div className="text-xs text-muted-foreground">Receipts</div>
                 </div>
                 <div className="text-center p-3 bg-secondary rounded-lg">
                   <div className="font-bold text-lg">{exportData.summary.tags}</div>
@@ -111,7 +111,7 @@ export default function Settings() {
                   <div className="text-center p-2 bg-red-50 dark:bg-red-950 rounded"><div className="font-bold">{exportData?.summary.deletedInTrash.incidents}</div><div className="text-xs">Incidents</div></div>
                   <div className="text-center p-2 bg-red-50 dark:bg-red-950 rounded"><div className="font-bold">{exportData?.summary.deletedInTrash.persons}</div><div className="text-xs">Persons</div></div>
                   <div className="text-center p-2 bg-red-50 dark:bg-red-950 rounded"><div className="font-bold">{exportData?.summary.deletedInTrash.aliases}</div><div className="text-xs">Aliases</div></div>
-                  <div className="text-center p-2 bg-red-50 dark:bg-red-950 rounded"><div className="font-bold">{exportData?.summary.deletedInTrash.evidence}</div><div className="text-xs">Evidence</div></div>
+                  <div className="text-center p-2 bg-red-50 dark:bg-red-950 rounded"><div className="font-bold">{exportData?.summary.deletedInTrash.evidence}</div><div className="text-xs">Receipts</div></div>
                   <div className="text-center p-2 bg-red-50 dark:bg-red-950 rounded"><div className="font-bold">{exportData?.summary.deletedInTrash.tags}</div><div className="text-xs">Tags</div></div>
                 </div>
 
@@ -125,7 +125,7 @@ export default function Settings() {
                   <TrashSection title="Deleted Aliases" icon={<Database className="h-4 w-4" />} items={trash.aliases.map((a) => ({ id: a.id, label: a.alias, sub: "" }))} onRestore={(id) => restoreAlias.mutate({ id })} />
                 )}
                 {trash?.evidence && trash.evidence.length > 0 && (
-                  <TrashSection title="Deleted Evidence" icon={<FileImage className="h-4 w-4" />} items={trash.evidence.map((e) => ({ id: e.id, label: e.fileName, sub: e.evidenceType }))} onRestore={(id) => restoreEvidence.mutate({ id })} />
+                  <TrashSection title="Deleted Receipts" icon={<FileImage className="h-4 w-4" />} items={trash.evidence.map((e) => ({ id: e.id, label: e.fileName, sub: e.evidenceType }))} onRestore={(id) => restoreEvidence.mutate({ id })} />
                 )}
                 {trash?.tags && trash.tags.length > 0 && (
                   <TrashSection title="Deleted Tags" icon={<Tag className="h-4 w-4" />} items={trash.tags.map((t) => ({ id: t.id, label: t.name, sub: "" }))} onRestore={(id) => restoreTag.mutate({ id })} />
@@ -153,7 +153,7 @@ export default function Settings() {
                 <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 shrink-0" />
                 <div>
                   <p className="font-medium">Soft Delete is Active</p>
-                  <p className="text-muted-foreground">When you click "Delete," records are hidden but NOT destroyed. They sit in the trash until restored. All 6 entity types (incidents, persons, aliases, evidence, tags, platforms) support soft delete.</p>
+                  <p className="text-muted-foreground">When you click "Delete," records are hidden but NOT destroyed. They sit in the trash until restored. All 6 entity types (incidents, persons, aliases, receipts, tags, platforms) support soft delete.</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">

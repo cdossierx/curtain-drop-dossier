@@ -23,7 +23,7 @@ const EVENT_TYPE_LABELS: Record<string, string> = {
   narrative_seeding: "Narrative Seeding",
   dogpiling: "Dogpiling",
   coordinated_live: "Coordinated Live",
-  evidence_leak: "Evidence Leak",
+  evidence_leak: "Receipt Leak",
   false_allegation: "False Allegation",
   account_creation: "Account Creation",
   account_deletion: "Account Deletion",
@@ -76,7 +76,7 @@ export default function Dashboard() {
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Dashboard</h1>
           <p className="text-sm text-muted-foreground mt-1">
-            Evidence, timelines, transcripts, and linked profiles
+            Receipts, timelines, transcripts, and linked profiles
           </p>
         </div>
 
@@ -89,7 +89,7 @@ export default function Dashboard() {
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
             <Card><CardContent className="pt-5"><div className="text-2xl font-bold">{stats?.total || 0}</div><p className="text-xs text-muted-foreground mt-1">Incidents</p></CardContent></Card>
-            <Card><CardContent className="pt-5"><div className="text-2xl font-bold">{evidenceStats?.total || 0}</div><p className="text-xs text-muted-foreground mt-1">Evidence Files</p></CardContent></Card>
+            <Card><CardContent className="pt-5"><div className="text-2xl font-bold">{evidenceStats?.total || 0}</div><p className="text-xs text-muted-foreground mt-1">Receipts</p></CardContent></Card>
             <Card><CardContent className="pt-5"><div className="text-2xl font-bold">{personStats?.total || 0}</div><p className="text-xs text-muted-foreground mt-1">People Tracked</p></CardContent></Card>
             <Card><CardContent className="pt-5"><div className="text-2xl font-bold">{platformStats?.total || 0}</div><p className="text-xs text-muted-foreground mt-1">Platforms</p></CardContent></Card>
             <Card><CardContent className="pt-5"><div className="text-2xl font-bold">{stats?.avgMentalHealth || 0}/10</div><p className="text-xs text-muted-foreground mt-1">Avg. Mental Impact</p></CardContent></Card>

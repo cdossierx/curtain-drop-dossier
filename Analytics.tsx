@@ -15,7 +15,7 @@ const COLORS = ["#ef4444", "#f97316", "#eab308", "#22c55e", "#3b82f6", "#a855f7"
 const EVENT_LABELS: Record<string, string> = {
   harassment: "Harassment", defamation: "Defamation", doxxing: "Doxxing", threat: "Threat",
   narrative_seeding: "Narrative Seeding", dogpiling: "Dogpiling", coordinated_live: "Coordinated Live",
-  evidence_leak: "Evidence Leak", false_allegation: "False Allegation",
+  evidence_leak: "Receipt Leak", false_allegation: "False Allegation",
   account_creation: "Acct Creation", account_deletion: "Acct Deletion",
 };
 
@@ -54,7 +54,7 @@ export default function Analytics() {
             {/* Key Stats */}
             <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 print:grid-cols-5">
               <Card className="border-l-4 border-l-red-500"><CardContent className="pt-5"><div className="text-2xl font-bold">{stats?.total ?? 0}</div><p className="text-xs text-muted-foreground">Incidents</p></CardContent></Card>
-              <Card className="border-l-4 border-l-orange-500"><CardContent className="pt-5"><div className="text-2xl font-bold">{evidenceStats?.total ?? 0}</div><p className="text-xs text-muted-foreground">Evidence</p></CardContent></Card>
+              <Card className="border-l-4 border-l-orange-500"><CardContent className="pt-5"><div className="text-2xl font-bold">{evidenceStats?.total ?? 0}</div><p className="text-xs text-muted-foreground">Receipts</p></CardContent></Card>
               <Card className="border-l-4 border-l-yellow-500"><CardContent className="pt-5"><div className="text-2xl font-bold">{personStats?.total ?? 0}</div><p className="text-xs text-muted-foreground">People</p></CardContent></Card>
               <Card className="border-l-4 border-l-green-500"><CardContent className="pt-5"><div className="text-2xl font-bold">{platformStats?.total ?? 0}</div><p className="text-xs text-muted-foreground">Platforms</p></CardContent></Card>
               <Card className="border-l-4 border-l-blue-500"><CardContent className="pt-5"><div className="text-2xl font-bold">{stats?.avgMentalHealth ?? 0}/10</div><p className="text-xs text-muted-foreground">Avg Impact</p></CardContent></Card>

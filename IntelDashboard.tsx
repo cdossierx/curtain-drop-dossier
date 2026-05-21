@@ -250,7 +250,7 @@ export default function IntelDashboard() {
               </ul>
               <p className="text-[10px] text-zinc-600 mt-3 flex items-center gap-1.5">
                 <FileText className="h-3 w-3" />
-                Evidence is labeled Receipts on this view — organized for narrative review.
+                Receipts organized for narrative review.
               </p>
             </Panel>
           </div>

@@ -14,9 +14,9 @@ import { toast } from "sonner";
 import { Plus, Trash2, ExternalLink, Pencil, Loader2, Upload, Link2, FileText, X } from "lucide-react";
 import { EditDialog } from "./EditDialog";
 import { FloatingActionButton } from "./FloatingActionButton";
-import { EvidencePreview } from "./EvidencePreview";
+import { ReceiptsPreview } from "./ReceiptsPreview";
 
-const EVIDENCE_TYPES = [
+const RECEIPT_TYPES = [
   { value: "screenshot", label: "Screenshot" }, { value: "video_clip", label: "Video Clip" },
   { value: "full_video", label: "Full Video" }, { value: "audio_recording", label: "Audio Recording" },
   { value: "transcript", label: "Transcript" }, { value: "chat_log", label: "Chat Log" },
@@ -31,28 +31,28 @@ const CONFIDENCE_COLORS: Record<string, string> = {
 const ALLOWED_TYPES = ".pdf,.png,.jpg,.jpeg,.webp";
 const MAX_SIZE_MB = 10;
 
-export default function Evidence() {
+export default function Receipts() {
   const { data: files, isLoading } = trpc.evidence.list.useQuery({});
   const { data: persons } = trpc.persons.list.useQuery();
   const utils = trpc.useUtils();
-  const evidenceFiles = files ?? [];
+  const receiptFiles = files ?? [];
   const personList = persons ?? [];
   const [searchParams, setSearchParams] = useSearchParams();
   const selectedId = searchParams.get("selected");
 
   const [showForm, setShowForm] = useState(false);
-  const [editEvidence, setEditEvidence] = useState<{ id: number; fileName: string; fileUrl: string; evidenceType: string; description: string; confidence: string } | null>(null);
+  const [editReceipt, setEditReceipt] = useState<{ id: number; fileName: string; fileUrl: string; evidenceType: string; description: string; confidence: string } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Auto-open selected evidence from URL
+  // Auto-open selected receipt from URL
   useEffect(() => {
     if (selectedId && files) {
       const id = Number(selectedId);
       const match = files.find((f) => f.id === id);
       if (match) {
-        setEditEvidence({ id: match.id, fileName: match.fileName, fileUrl: match.fileUrl || "", evidenceType: match.evidenceType, description: match.description || "", confidence: match.confidence });
+        setEditReceipt({ id: match.id, fileName: match.fileName, fileUrl: match.fileUrl || "", evidenceType: match.evidenceType, description: match.description || "", confidence: match.confidence });
         setTimeout(() => {
-          const el = document.getElementById(`evidence-card-${id}`);
+          const el = document.getElementById(`receipt-card-${id}`);
           if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
         }, 200);
       }
@@ -70,7 +70,7 @@ export default function Evidence() {
 
   const createMutation = trpc.evidence.create.useMutation({
     onSuccess: () => {
-      toast.success("Evidence added");
+      toast.success("Receipt added");
       setShowForm(false);
       resetForm();
       utils.evidence.list.invalidate();
@@ -85,7 +85,7 @@ export default function Evidence() {
   });
 
   const updateMutation = trpc.evidence.update.useMutation({
-    onSuccess: () => { toast.success("Evidence updated"); utils.evidence.list.invalidate(); utils.evidence.stats.invalidate(); setEditEvidence(null); },
+    onSuccess: () => { toast.success("Receipt updated"); utils.evidence.list.invalidate(); utils.evidence.stats.invalidate(); setEditReceipt(null); },
     onError: (err) => toast.error("Update failed: " + err.message),
   });
 
@@ -163,10 +163,10 @@ export default function Evidence() {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight">Evidence Vault</h1>
+            <h1 className="text-2xl font-bold tracking-tight">Receipts Vault</h1>
             <p className="text-sm text-muted-foreground mt-1">Upload files or paste links</p>
           </div>
-          <Button size="sm" onClick={() => { resetForm(); setShowForm(!showForm); }}><Plus className="h-4 w-4 mr-1" />Add Evidence</Button>
+          <Button size="sm" onClick={() => { resetForm(); setShowForm(!showForm); }}><Plus className="h-4 w-4 mr-1" />Add Receipt</Button>
         </div>
 
         {showForm && (
@@ -236,7 +236,7 @@ export default function Evidence() {
                   <div className="space-y-1.5"><Label>Type</Label>
                     <Select value={form.evidenceType} onValueChange={(v) => setForm({ ...form, evidenceType: v })}>
                       <SelectTrigger><SelectValue /></SelectTrigger>
-                      <SelectContent>{EVIDENCE_TYPES.map((t) => <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>)}</SelectContent>
+                      <SelectContent>{RECEIPT_TYPES.map((t) => <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>)}</SelectContent>
                     </Select>
                   </div>
                   <div className="space-y-1.5"><Label>Person</Label>
@@ -279,25 +279,25 @@ export default function Evidence() {
           </Card>
         )}
 
-        {/* Evidence list */}
-        {isLoading ? <div className="text-sm text-muted-foreground">Loading...</div> : evidenceFiles.length === 0 ? (
-          <Card><CardContent className="py-10 text-center"><p className="text-muted-foreground text-sm">No evidence yet</p></CardContent></Card>
+        {/* Receipts list */}
+        {isLoading ? <div className="text-sm text-muted-foreground">Loading...</div> : receiptFiles.length === 0 ? (
+          <Card><CardContent className="py-10 text-center"><p className="text-muted-foreground text-sm">No receipts yet</p></CardContent></Card>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {evidenceFiles.map((f) => (
-              <Card key={f.id} id={`evidence-card-${f.id}`}>
+            {receiptFiles.map((f) => (
+              <Card key={f.id} id={`receipt-card-${f.id}`}>
                 <CardContent className="p-4">
                   <div className="flex items-start justify-between">
                     <div className="flex items-start gap-3">
-                      <EvidencePreview
+                      <ReceiptsPreview
                         item={{ id: f.id, fileName: f.fileName, fileUrl: f.fileUrl, filePath: f.filePath, storageType: f.storageType, evidenceType: f.evidenceType, description: f.description }}
                         size="md"
                       />
                       <div className="min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="font-semibold text-sm truncate">{f.fileName || `Evidence #${f.id}`}</span>
+                          <span className="font-semibold text-sm truncate">{f.fileName || `Receipt #${f.id}`}</span>
                           {f.storageType === "upload" && <Badge variant="secondary" className="text-[10px]">Uploaded</Badge>}
-                          <Badge variant="outline" className="text-xs">{(f.evidenceType || "evidence").replace("_", " ")}</Badge>
+                          <Badge variant="outline" className="text-xs">{(f.evidenceType || "receipt").replace("_", " ")}</Badge>
                           <Badge className={`text-xs ${CONFIDENCE_COLORS[f.confidence]}`}>{f.confidence}</Badge>
                         </div>
                         {f.description && <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{f.description}</p>}
@@ -316,7 +316,7 @@ export default function Evidence() {
                       </div>
                     </div>
                     <div className="flex items-center gap-1 shrink-0">
-                      <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => setEditEvidence({ id: f.id, fileName: f.fileName, fileUrl: f.fileUrl || "", evidenceType: f.evidenceType, description: f.description || "", confidence: f.confidence })}>
+                      <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => setEditReceipt({ id: f.id, fileName: f.fileName, fileUrl: f.fileUrl || "", evidenceType: f.evidenceType, description: f.description || "", confidence: f.confidence })}>
                         <Pencil className="h-3 w-3 text-muted-foreground" />
                       </Button>
                       <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => { if (confirm("Delete?")) deleteMutation.mutate({ id: f.id }); }}>
@@ -331,32 +331,32 @@ export default function Evidence() {
         )}
 
         <EditDialog
-          open={editEvidence !== null}
+          open={editReceipt !== null}
           onClose={() => {
-            setEditEvidence(null);
+            setEditReceipt(null);
             if (searchParams.has("selected")) {
               const newParams = new URLSearchParams(searchParams);
               newParams.delete("selected");
               setSearchParams(newParams, { replace: true });
             }
           }}
-          title="Edit Evidence"
+          title="Edit Receipt"
           fields={[
             { name: "fileName", label: "File Name", type: "text" },
             { name: "fileUrl", label: "URL / Link", type: "text" },
-            { name: "evidenceType", label: "Type", type: "select", options: EVIDENCE_TYPES },
+            { name: "evidenceType", label: "Type", type: "select", options: RECEIPT_TYPES },
             { name: "confidence", label: "Confidence", type: "select", options: [
               { value: "confirmed", label: "Confirmed" }, { value: "strong_evidence", label: "Strong" },
               { value: "moderate_evidence", label: "Moderate" }, { value: "unverified", label: "Unverified" }, { value: "disputed", label: "Disputed" },
             ]},
             { name: "description", label: "Description", type: "textarea" },
           ]}
-          values={editEvidence ? { fileName: editEvidence.fileName, fileUrl: editEvidence.fileUrl, evidenceType: editEvidence.evidenceType, confidence: editEvidence.confidence, description: editEvidence.description } : {}}
-          onSave={(vals) => editEvidence && updateMutation.mutate({ id: editEvidence.id, fileName: vals.fileName, fileUrl: vals.fileUrl, evidenceType: vals.evidenceType as any, confidence: vals.confidence as any, description: vals.description })}
+          values={editReceipt ? { fileName: editReceipt.fileName, fileUrl: editReceipt.fileUrl, evidenceType: editReceipt.evidenceType, confidence: editReceipt.confidence, description: editReceipt.description } : {}}
+          onSave={(vals) => editReceipt && updateMutation.mutate({ id: editReceipt.id, fileName: vals.fileName, fileUrl: vals.fileUrl, evidenceType: vals.evidenceType as any, confidence: vals.confidence as any, description: vals.description })}
           isPending={updateMutation.isPending}
         />
 
-        <FloatingActionButton onClick={() => { resetForm(); setShowForm(true); }} label="Add evidence" />
+        <FloatingActionButton onClick={() => { resetForm(); setShowForm(true); }} label="Add receipt" />
       </div>
     </AppLayout>
   );

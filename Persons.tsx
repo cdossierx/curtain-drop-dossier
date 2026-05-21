@@ -19,7 +19,7 @@ import { FloatingActionButton } from "./FloatingActionButton";
 const EVENT_TYPE_LABELS: Record<string, string> = {
   harassment: "Harassment", defamation: "Defamation", doxxing: "Doxxing", threat: "Threat",
   narrative_seeding: "Narrative Seeding", dogpiling: "Dogpiling", coordinated_live: "Coordinated Live",
-  evidence_leak: "Evidence Leak", false_allegation: "False Allegation",
+  evidence_leak: "Receipt Leak", false_allegation: "False Allegation",
   account_creation: "Acct Creation", account_deletion: "Acct Deletion",
 };
 
@@ -174,7 +174,7 @@ export default function Persons() {
                     <>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                   <Card><CardContent className="pt-4"><div className="text-xl font-bold">{personDetail.totalIncidents}</div><p className="text-xs text-muted-foreground">Incidents</p></CardContent></Card>
-                  <Card><CardContent className="pt-4"><div className="text-xl font-bold">{personDetail.evidenceCount}</div><p className="text-xs text-muted-foreground">Evidence</p></CardContent></Card>
+                  <Card><CardContent className="pt-4"><div className="text-xl font-bold">{personDetail.evidenceCount}</div><p className="text-xs text-muted-foreground">Receipts</p></CardContent></Card>
                   <Card><CardContent className="pt-4"><div className="text-xl font-bold">{aliases.length}</div><p className="text-xs text-muted-foreground">Aliases</p></CardContent></Card>
                   <Card><CardContent className="pt-4"><div className="text-xl font-bold">{platformsUsed.length}</div><p className="text-xs text-muted-foreground">Platforms</p></CardContent></Card>
                 </div>

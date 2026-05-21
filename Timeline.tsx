@@ -13,12 +13,12 @@ import { Clock, Trash2, ExternalLink, X, Filter, Pencil, Link2, Unlink, FileImag
 import { toast } from "sonner";
 import { EditIncident } from "./EditIncident";
 import { FloatingActionButton } from "./FloatingActionButton";
-import { EvidencePreview } from "./EvidencePreview";
+import { ReceiptsPreview } from "./ReceiptsPreview";
 
 const EVENT_TYPE_LABELS: Record<string, string> = {
   harassment: "Harassment", defamation: "Defamation", doxxing: "Doxxing", threat: "Threat",
   narrative_seeding: "Narrative Seeding", dogpiling: "Dogpiling", coordinated_live: "Coordinated Live",
-  evidence_leak: "Evidence Leak", false_allegation: "False Allegation",
+  evidence_leak: "Receipt Leak", false_allegation: "False Allegation",
   account_creation: "Acct Created", account_deletion: "Acct Deleted",
 };
 
@@ -290,24 +290,24 @@ function IncidentDetailDialog({
           {incident.notes && <div><span className="text-muted-foreground">Notes:</span><p className="mt-1">{incident.notes}</p></div>}
           {incident.context && <div><span className="text-muted-foreground">Context:</span><p className="mt-1">{incident.context}</p></div>}
 
-          {/* Linked Evidence */}
+          {/* Linked Receipts */}
           {incidentEvidence.length > 0 && (
             <div className="border-t pt-4">
               <div className="flex items-center gap-2 mb-3">
                 <FileImage className="h-4 w-4 text-muted-foreground" />
-                <span className="font-medium">Evidence ({incidentEvidence.length})</span>
+                <span className="font-medium">Receipts ({incidentEvidence.length})</span>
               </div>
               <div className="space-y-3">
                 {incidentEvidence.map((ev) => (
                   <Card key={ev.id}><CardContent className="p-3">
                     <div className="flex items-start gap-3">
-                      <EvidencePreview
+                      <ReceiptsPreview
                         item={{ id: ev.id, fileName: ev.fileName, fileUrl: ev.fileUrl, filePath: ev.filePath, storageType: ev.storageType, evidenceType: ev.evidenceType, description: ev.description }}
                         size="sm"
                       />
                       <div className="min-w-0 flex-1">
-                        <p className="text-xs font-medium truncate">{ev.fileName || `Evidence #${ev.id}`}</p>
-                        <Badge variant="outline" className="text-[10px] mt-0.5">{(ev.evidenceType || "evidence").replace("_", " ")}</Badge>
+                        <p className="text-xs font-medium truncate">{ev.fileName || `Receipt #${ev.id}`}</p>
+                        <Badge variant="outline" className="text-[10px] mt-0.5">{(ev.evidenceType || "receipt").replace("_", " ")}</Badge>
                         {ev.storageType === "upload" && <Badge variant="secondary" className="text-[10px] mt-0.5 ml-1">Uploaded</Badge>}
                         {ev.description && <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{ev.description}</p>}
                       </div>

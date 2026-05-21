@@ -29,7 +29,7 @@ const navItems = [
   { path: "/intake", label: "Intake", icon: Inbox },
   { path: "/persons", label: "Persons", icon: UserCircle },
   { path: "/aliases", label: "Aliases", icon: AtSign },
-  { path: "/evidence", label: "Evidence", icon: FileImage },
+  { path: "/receipts", label: "Receipts", icon: FileImage },
   { path: "/tags", label: "Tags", icon: Tag },
   { path: "/platforms", label: "Platforms", icon: Globe },
   { path: "/analytics", label: "Analytics", icon: BarChart3 },

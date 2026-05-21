@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Dialog, DialogContent } from "./dialog";
 import { FileImage, FileText, FileAudio, Film, ScrollText, MessageSquare, Scale, Globe, File } from "lucide-react";
 
-interface EvidenceItem {
+interface ReceiptsItem {
   id: number;
   fileName?: string | null;
   fileUrl?: string | null;
@@ -23,13 +23,13 @@ const TYPE_ICONS: Record<string, React.ReactNode> = {
   social_media_post: <Globe className="h-5 w-5" />,
 };
 
-function getSrc(item: EvidenceItem): string | null {
+function getSrc(item: ReceiptsItem): string | null {
   if (item.storageType === "upload" && item.filePath) return item.filePath;
   if (item.fileUrl) return item.fileUrl;
   return null;
 }
 
-function isImage(item: EvidenceItem): boolean {
+function isImage(item: ReceiptsItem): boolean {
   const src = getSrc(item);
   if (!src) return false;
   const lowerSrc = src.toLowerCase();
@@ -37,19 +37,19 @@ function isImage(item: EvidenceItem): boolean {
     lowerSrc.endsWith(".png") || lowerSrc.endsWith(".jpg") || lowerSrc.endsWith(".jpeg") || lowerSrc.endsWith(".webp");
 }
 
-function isPdf(item: EvidenceItem): boolean {
+function isPdf(item: ReceiptsItem): boolean {
   return (item.fileName?.toLowerCase().endsWith(".pdf") ?? false) || (item.fileUrl?.toLowerCase().endsWith(".pdf") ?? false);
 }
 
-interface EvidencePreviewProps {
-  item: EvidenceItem;
+interface ReceiptsPreviewProps {
+  item: ReceiptsItem;
   size?: "sm" | "md" | "lg";
 }
 
-export function EvidencePreview({ item, size = "md" }: EvidencePreviewProps) {
+export function ReceiptsPreview({ item, size = "md" }: ReceiptsPreviewProps) {
   const [viewerOpen, setViewerOpen] = useState(false);
   const src = getSrc(item);
-  const fileName = item.fileName || `Evidence #${item.id}`;
+  const fileName = item.fileName || `Receipt #${item.id}`;
 
   const sizeClasses = {
     sm: "w-10 h-10",
@@ -79,7 +79,7 @@ export function EvidencePreview({ item, size = "md" }: EvidencePreviewProps) {
             loading="lazy"
           />
         </button>
-        {viewerOpen && <EvidenceViewer item={item} open={viewerOpen} onClose={() => setViewerOpen(false)} />}
+        {viewerOpen && <ReceiptsViewer item={item} open={viewerOpen} onClose={() => setViewerOpen(false)} />}
       </>
     );
   }
@@ -98,7 +98,7 @@ export function EvidencePreview({ item, size = "md" }: EvidencePreviewProps) {
             {size === "lg" && <span className="text-[9px] text-red-500 font-medium mt-0.5 block">PDF</span>}
           </div>
         </button>
-        {viewerOpen && <EvidenceViewer item={item} open={viewerOpen} onClose={() => setViewerOpen(false)} />}
+        {viewerOpen && <ReceiptsViewer item={item} open={viewerOpen} onClose={() => setViewerOpen(false)} />}
       </>
     );
   }
@@ -114,16 +114,16 @@ export function EvidencePreview({ item, size = "md" }: EvidencePreviewProps) {
       >
         <span className="text-muted-foreground">{typeIcon}</span>
       </button>
-      {viewerOpen && <EvidenceViewer item={item} open={viewerOpen} onClose={() => setViewerOpen(false)} />}
+      {viewerOpen && <ReceiptsViewer item={item} open={viewerOpen} onClose={() => setViewerOpen(false)} />}
     </>
   );
 }
 
 // Full-size viewer modal
-export function EvidenceViewer({ item, open, onClose }: { item: EvidenceItem; open: boolean; onClose: () => void }) {
+export function ReceiptsViewer({ item, open, onClose }: { item: ReceiptsItem; open: boolean; onClose: () => void }) {
   const src = getSrc(item);
-  const fileName = item.fileName || `Evidence #${item.id}`;
-  const evidenceType = item.evidenceType || "evidence";
+  const fileName = item.fileName || `Receipt #${item.id}`;
+  const evidenceType = item.evidenceType || "receipt";
 
   return (
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
@@ -184,4 +184,4 @@ export function EvidenceViewer({ item, open, onClose }: { item: EvidenceItem; op
 }
 
 export { isImage, isPdf, getSrc };
-export type { EvidenceItem };
+export type { ReceiptsItem };

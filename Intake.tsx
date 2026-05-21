@@ -33,7 +33,7 @@ const EVENT_TYPES = [
   { value: "narrative_seeding", label: "Narrative Seeding" },
   { value: "dogpiling", label: "Dogpiling" },
   { value: "coordinated_live", label: "Coordinated Live" },
-  { value: "evidence_leak", label: "Evidence Leak" },
+  { value: "evidence_leak", label: "Receipt Leak" },
   { value: "false_allegation", label: "False Allegation" },
   { value: "account_creation", label: "Account Creation" },
   { value: "account_deletion", label: "Account Deletion" },
@@ -89,7 +89,7 @@ export default function Intake() {
     onSuccess: () => { toast.success("Restored"); utils.intake.list.invalidate(); utils.intake.stats.invalidate(); },
   });
   const convertMutation = trpc.intake.convertToEvidence.useMutation({
-    onSuccess: () => { toast.success("Saved as evidence"); utils.intake.list.invalidate(); utils.intake.stats.invalidate(); utils.evidence.list.invalidate(); setDetailItem(null); },
+    onSuccess: () => { toast.success("Saved as receipt"); utils.intake.list.invalidate(); utils.intake.stats.invalidate(); utils.evidence.list.invalidate(); setDetailItem(null); },
   });
   const linkMutation = trpc.intake.linkToIncident.useMutation({
     onSuccess: () => { toast.success("Linked to incident"); utils.intake.list.invalidate(); utils.intake.stats.invalidate(); setLinkOpen(false); setLinkItemId(null); },
@@ -202,7 +202,7 @@ export default function Intake() {
           <div>
             <h1 className="text-2xl font-bold tracking-tight">Intake Queue</h1>
             <p className="text-sm text-muted-foreground mt-1">
-              Bulk upload, review, and route evidence
+              Bulk upload, review, and route receipts
             </p>
           </div>
           {stats && (
@@ -264,7 +264,7 @@ export default function Intake() {
                 <div className="text-xs text-muted-foreground space-y-1">
                   <p>After upload, files go to the <strong>Review Queue</strong> where you can:</p>
                   <ul className="list-disc list-inside space-y-0.5 ml-1">
-                    <li>Keep as standalone evidence</li>
+                    <li>Keep as standalone receipts</li>
                     <li>Attach to an existing incident</li>
                     <li>Create a new incident draft</li>
                     <li>Assign person, platform, and tags</li>
@@ -446,7 +446,7 @@ export default function Intake() {
                         description: itemDetail.description || undefined,
                       });
                     }}>
-                      <FileCheck className="h-3.5 w-3.5 mr-1" />Keep as Evidence
+                      <FileCheck className="h-3.5 w-3.5 mr-1" />Keep as Receipt
                     </Button>
                     <Button size="sm" variant="outline" onClick={() => { setDetailItem(null); setLinkItemId(itemDetail.id); setLinkOpen(true); }}>
                       <Link2 className="h-3.5 w-3.5 mr-1" />Link to Incident
@@ -683,7 +683,7 @@ function IntakeCard({
             {isConverted && (
               <p className="text-xs text-green-600 mt-1 flex items-center gap-1">
                 <CheckCircle className="h-3 w-3" />
-                {item?.linkedIncidentId ? "Linked to incident" : "Saved as evidence"}
+                {item?.linkedIncidentId ? "Linked to incident" : "Saved as receipt"}
               </p>
             )}
           </div>

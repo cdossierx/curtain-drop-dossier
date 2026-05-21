@@ -123,7 +123,7 @@ export default function Aliases() {
                   </div>
                 </div>
                 <div className="space-y-1.5"><Label>Suspected Operator</Label><Input placeholder="Who might be behind this?" value={form.suspectedOperator} onChange={(e) => setForm({ ...form, suspectedOperator: e.target.value })} /></div>
-                <div className="space-y-1.5"><Label>Evidence Linking</Label><Textarea placeholder="Evidence connecting alias to person..." rows={2} value={form.evidenceDescription} onChange={(e) => setForm({ ...form, evidenceDescription: e.target.value })} /></div>
+                <div className="space-y-1.5"><Label>Receipts Linking</Label><Textarea placeholder="Receipts connecting alias to person..." rows={2} value={form.evidenceDescription} onChange={(e) => setForm({ ...form, evidenceDescription: e.target.value })} /></div>
                 <div className="space-y-1.5"><Label>Notes</Label><Textarea placeholder="Notes..." rows={2} value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} /></div>
                 <div className="flex gap-2">
                   <Button type="submit" size="sm" disabled={createMutation.isPending}>
@@ -189,7 +189,7 @@ export default function Aliases() {
               { value: "moderate_evidence", label: "Moderate" }, { value: "unverified", label: "Unverified" }, { value: "disputed", label: "Disputed" },
             ]},
             { name: "suspectedOperator", label: "Suspected Operator", type: "text" },
-            { name: "evidenceDescription", label: "Evidence Linking", type: "textarea" },
+            { name: "evidenceDescription", label: "Receipts Linking", type: "textarea" },
             { name: "notes", label: "Notes", type: "textarea" },
           ]}
           values={editAlias ? { alias: editAlias.alias, confidence: editAlias.confidence, suspectedOperator: editAlias.suspectedOperator, evidenceDescription: editAlias.evidenceDescription, notes: editAlias.notes } : {}}

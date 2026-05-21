@@ -16,7 +16,7 @@ import { Button } from "./button";
 const EVENT_TYPE_LABELS: Record<string, string> = {
   harassment: "Harassment", defamation: "Defamation", doxxing: "Doxxing", threat: "Threat",
   narrative_seeding: "Narrative Seeding", dogpiling: "Dogpiling", coordinated_live: "Coordinated Live",
-  evidence_leak: "Evidence Leak", false_allegation: "False Allegation",
+  evidence_leak: "Receipt Leak", false_allegation: "False Allegation",
   account_creation: "Acct Created", account_deletion: "Acct Deleted",
 };
 
@@ -54,7 +54,7 @@ export function GlobalSearch() {
       case "incident": navigate(`/timeline?selected=${id}`); break;
       case "person": navigate(`/persons?selected=${id}`); break;
       case "alias": navigate(`/aliases?selected=${id}`); break;
-      case "evidence": navigate(`/evidence?selected=${id}`); break;
+      case "evidence": navigate(`/receipts?selected=${id}`); break;
       case "tag": navigate(`/tags?selected=${id}`); break;
     }
   }, [navigate]);
@@ -77,7 +77,7 @@ export function GlobalSearch() {
       </Button>
 
       <CommandDialog open={open} onOpenChange={setOpen}>
-        <CommandInput placeholder="Search incidents, persons, aliases, evidence, tags..." value={query} onValueChange={setQuery} />
+        <CommandInput placeholder="Search incidents, persons, aliases, receipts, tags..." value={query} onValueChange={setQuery} />
         <CommandList>
           {query.trim().length === 0 && <CommandEmpty>Type to search across all your data.</CommandEmpty>}
           {query.trim().length > 0 && !isFetching && !hasResults && <CommandEmpty>No results found.</CommandEmpty>}
@@ -141,7 +141,7 @@ export function GlobalSearch() {
           {aliases.length > 0 && <CommandSeparator />}
 
           {evidence.length > 0 && (
-            <CommandGroup heading={`Evidence (${evidence.length})`}>
+            <CommandGroup heading={`Receipts (${evidence.length})`}>
               {evidence.map((ev) => (
                 <CommandItem key={`ev-${ev.id}`} onSelect={() => handleSelect("evidence", ev.id)} className="flex items-start gap-2 py-2">
                   {ev.storageType === "upload" && ev.filePath ? (
@@ -150,8 +150,8 @@ export function GlobalSearch() {
                     </div>
                   ) : <Shield className="h-4 w-4 text-green-500 shrink-0 mt-0.5" />}
                   <div className="min-w-0">
-                    <p className="text-sm font-medium truncate">{ev.fileName || `Evidence #${ev.id}`}</p>
-                    <p className="text-xs text-muted-foreground">{(ev.evidenceType || "evidence").replace("_", " ")}{ev.storageType === "upload" && " · Uploaded"}</p>
+                    <p className="text-sm font-medium truncate">{ev.fileName || `Receipt #${ev.id}`}</p>
+                    <p className="text-xs text-muted-foreground">{(ev.evidenceType || "receipt").replace("_", " ")}{ev.storageType === "upload" && " · Uploaded"}</p>
                     {ev.description && <p className="text-xs text-muted-foreground truncate">{ev.description}</p>}
                   </div>
                 </CommandItem>
